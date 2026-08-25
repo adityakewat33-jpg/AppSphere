@@ -4,6 +4,14 @@ let activeApp = null;
 let selectedStarRating = 5;
 let selectedScreenshotFiles = [];
 
+const DB_VERSION = 'v3_real_no_mock';
+
+// Clear old mock data cache if version changed
+if (localStorage.getItem('appsphere_db_version') !== DB_VERSION) {
+  localStorage.removeItem('appsphere_apps');
+  localStorage.setItem('appsphere_db_version', DB_VERSION);
+}
+
 // DOM Elements
 const appsGrid = document.getElementById('appsGrid');
 const searchInput = document.getElementById('searchInput');
@@ -118,6 +126,7 @@ async function loadApps(category = activeCategory, search = '') {
     const data = await res.json();
     currentApps = data;
   } catch (err) {
+    // Fallback for GitHub Pages static hosting
     const localData = localStorage.getItem('appsphere_apps');
     if (localData && JSON.parse(localData).length > 0) {
       currentApps = JSON.parse(localData);
