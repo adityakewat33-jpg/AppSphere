@@ -21,13 +21,92 @@ const heroUploadBtn = document.getElementById('heroUploadBtn');
 const closeUploadBtn = document.getElementById('closeUploadBtn');
 const cancelUploadBtn = document.getElementById('cancelUploadBtn');
 
+// Default Seeded Apps
+const DEFAULT_APPS = [
+  {
+    id: "flapmaster",
+    title: "FlapMaster Arcade",
+    developer: "Aditya Kewat",
+    category: "Games",
+    subcategory: "Arcade",
+    rating: 4.9,
+    ratingCount: 1850,
+    downloads: 24500,
+    size: "18.5 MB",
+    version: "2.1.0",
+    packageName: "com.adityakewat.flapmaster",
+    icon: "https://api.iconify.design/game-icons:flapping-wing.svg?color=%2300d285",
+    banner: "uploads/screenshots/fm1.jpeg",
+    description: "Fly through dynamic obstacle courses with powerful shields, time-slow potions, custom tail particle trails, daily lucky wheel rewards, and global Firebase leaderboards!",
+    apkUrl: "uploads/apks/flapmaster.apk",
+    badge: "Release Version",
+    screenshots: [
+      "uploads/screenshots/fm1.jpeg",
+      "uploads/screenshots/fm2.jpeg",
+      "uploads/screenshots/fm3.jpeg",
+      "uploads/screenshots/fm4.jpeg"
+    ],
+    reviews: [{ user: "Alex Rivera", rating: 5, date: "2026-08-24", comment: "Smooth gameplay, great tail feather particles and lucky wheel rewards!" }]
+  },
+  {
+    id: "statussaver",
+    title: "Status Saver & Insta Downloader",
+    developer: "Aditya Kewat",
+    category: "Tools",
+    subcategory: "Utilities",
+    rating: 4.9,
+    ratingCount: 3420,
+    downloads: 42080,
+    size: "22.1 MB",
+    version: "1.4.2",
+    packageName: "com.statussaver.app",
+    icon: "https://api.iconify.design/material-symbols:download-for-offline.svg?color=%234facfe",
+    banner: "uploads/screenshots/ss1.jpeg",
+    description: "Save WhatsApp status photos & videos with one tap and download public Instagram Reels, IGTV videos, and posts directly to your phone gallery in high resolution!",
+    apkUrl: "uploads/apks/statussaver.apk",
+    badge: "Release Version",
+    screenshots: [
+      "uploads/screenshots/ss1.jpeg",
+      "uploads/screenshots/ss2.jpeg",
+      "uploads/screenshots/ss3.jpeg",
+      "uploads/screenshots/ss4.jpeg"
+    ],
+    reviews: [{ user: "Rohan Mehta", rating: 5, date: "2026-08-25", comment: "Super fast video downloads and status saver. Highly recommended tool!" }]
+  },
+  {
+    id: "blastgrid",
+    title: "BlastGrid",
+    developer: "Aditya Kewat",
+    category: "Games",
+    subcategory: "Arcade",
+    rating: 4.8,
+    ratingCount: 960,
+    downloads: 12800,
+    size: "16.2 MB",
+    version: "1.0.0",
+    packageName: "com.adityakewat.blastgrid",
+    icon: "https://api.iconify.design/material-symbols:grid-on.svg?color=%23ff4081",
+    banner: "uploads/screenshots/bg1.jpeg",
+    description: "Action-packed brick busting puzzle game! Blast through colorful grids, unlock powerful multi-ball boosters, dynamic particle explosions, and high score challenges.",
+    apkUrl: "uploads/apks/blastgrid.apk",
+    badge: "Release Version",
+    screenshots: [
+      "uploads/screenshots/bg1.jpeg",
+      "uploads/screenshots/bg2.jpeg",
+      "uploads/screenshots/bg3.jpeg",
+      "uploads/screenshots/bg4.jpeg"
+    ],
+    reviews: [{ user: "Vikram S.", rating: 5, date: "2026-08-25", comment: "Addictive grid brick buster! Great sound effects and ball physics." }]
+  }
+];
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
   loadApps();
   setupEvents();
 });
 
-// Fetch apps from API (with LocalStorage fallback for GitHub Pages)
+// Fetch apps from API (with LocalStorage / Default fallback for GitHub Pages)
 async function loadApps(category = activeCategory, search = '') {
   try {
     let url = '/api/apps?';
@@ -41,7 +120,12 @@ async function loadApps(category = activeCategory, search = '') {
   } catch (err) {
     // Fallback for GitHub Pages static hosting
     const localData = localStorage.getItem('appsphere_apps');
-    currentApps = localData ? JSON.parse(localData) : [];
+    if (localData && JSON.parse(localData).length > 0) {
+      currentApps = JSON.parse(localData);
+    } else {
+      currentApps = DEFAULT_APPS;
+      localStorage.setItem('appsphere_apps', JSON.stringify(DEFAULT_APPS));
+    }
 
     if (category && category !== 'All') {
       currentApps = currentApps.filter(a => a.category.toLowerCase() === category.toLowerCase());
@@ -216,10 +300,8 @@ async function downloadApk(app) {
     document.getElementById('modalDownloads').textContent = `${formatDownloads(app.downloads)}+`;
     showToast(`Downloading ${app.title} APK package...`);
 
-    // API update if available
     fetch(`/api/apps/${app.id}/download`, { method: 'POST' }).catch(() => {});
 
-    // Save to localStorage if in static mode
     const localApps = JSON.parse(localStorage.getItem('appsphere_apps') || '[]');
     const target = localApps.find(a => a.id === app.id);
     if (target) {
@@ -378,14 +460,12 @@ function setupEvents() {
     document.getElementById('reviewComment').value = '';
     showToast('Review submitted successfully!');
 
-    // API update if available
     fetch(`/api/apps/${activeApp.id}/review`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user, rating: selectedStarRating, comment })
     }).catch(() => {});
 
-    // LocalStorage sync
     const localApps = JSON.parse(localStorage.getItem('appsphere_apps') || '[]');
     const target = localApps.find(a => a.id === activeApp.id);
     if (target) {
@@ -395,7 +475,6 @@ function setupEvents() {
     }
   });
 
-  // Upload Form Submit Handler (Publish App)
   document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -458,7 +537,6 @@ function setupEvents() {
       screenshotUrls
     };
 
-    // Try API submission first
     try {
       const res = await fetch('/api/apps', {
         method: 'POST',
@@ -474,10 +552,9 @@ function setupEvents() {
         }
       }
     } catch (err) {
-      console.warn('API unavailable, falling back to LocalStorage mode for GitHub Pages');
+      console.warn('API unavailable, falling back to LocalStorage mode');
     }
 
-    // Static GitHub Pages mode fallback
     const localApps = JSON.parse(localStorage.getItem('appsphere_apps') || '[]');
     const newId = title.toLowerCase().replace(/[^a-z0-9]/g, '') + '_' + Date.now().toString(36);
     const defaultIcon = iconBase64 || iconUrl || 'https://api.iconify.design/material-symbols:android.svg?color=%2300f2fe';
