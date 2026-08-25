@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Flappy Neon - A Premium Canvas Experience</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Canvas for rendering game loop -->
+        <canvas id="game-canvas"></canvas>
+
+        <!-- Dynamic Game HUD Overlay -->
+        <div id="hud" class="hidden">
+            <div class="hud-left">
+                <span id="hud-score-label">SCORE</span>
+                <span id="hud-score">0</span>
+            </div>
+            <div class="hud-center">
+                <span id="hud-mode-badge" class="badge">CLASSIC</span>
+            </div>
+            <div class="hud-right">
+                <span id="hud-multiplier-label">SPEED</span>
+                <span id="hud-multiplier">1.0x</span>
+            </div>
+        </div>
+
+        <!-- Start Screen -->
+        <div id="start-screen" class="overlay-screen active">
+            <h1 class="game-title">FLAPPY<span class="highlight">NEON</span></h1>
+            <p class="game-subtitle">Tap spacebar or click to fly</p>
+
+            <div class="mode-selector">
+                <button class="mode-btn active" data-mode="classic">Classic</button>
+                <button class="mode-btn" data-mode="hard">Hard</button>
+                <button class="mode-btn" data-mode="zen">Zen</button>
+            </div>
+
+            <!-- Skin Selection Carousel -->
+            <div class="carousel-container">
+                <h3>CHOOSE YOUR FLAPPER</h3>
+                <div class="skin-carousel">
+                    <button class="carousel-nav prev">&lsaquo;</button>
+                    <div class="skin-card">
+                        <canvas id="skin-preview-canvas" width="60" height="60"></canvas>
+                        <h4 id="skin-name">Classic Yellow</h4>
+                        <p id="skin-desc">The standard flappy flyer.</p>
+                        <span id="skin-status" class="skin-unlocked">UNLOCKED</span>
+                    </div>
+                    <button class="carousel-nav next">&rsaquo;</button>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="start-game-btn" class="btn btn-primary">Start Flight</button>
+                <button id="open-settings-btn" class="btn btn-secondary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                </button>
+            </div>
+
+            <div class="stats-panel">
+                <div class="stat-item">
+                    <span class="stat-label">HIGH SCORE</span>
+                    <span id="best-score-display" class="stat-val">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">TOTAL FLAPS</span>
+                    <span id="total-flaps-display" class="stat-val">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Screen -->
+        <div id="settings-screen" class="overlay-screen hidden">
+            <h2 class="screen-title">SETTINGS</h2>
+            
+            <div class="settings-group">
+                <div class="settings-row">
+                    <label for="volume-control">Sound FX Volume</label>
+                    <div class="volume-slider-container">
+                        <input type="range" id="volume-control" min="0" max="1" step="0.1" value="0.5">
+                        <span id="volume-val">50%</span>
+                    </div>
+                </div>
+                
+                <div class="settings-row">
+                    <label for="music-control">Background Synth</label>
+                    <label class="switch">
+                        <input type="checkbox" id="music-control" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="controls-guide">
+                <h3>HOW TO FLY</h3>
+                <div class="guide-row">
+                    <span class="key">Spacebar</span> or <span class="key">Up Arrow</span> or <span class="key">Left Click</span>
+                    <span class="action">Flap Wings / Rise</span>
+                </div>
+                <div class="guide-row">
+                    <span class="key">ESC</span> or <span class="key">P</span>
+                    <span class="action">Pause Flight</span>
+                </div>
+            </div>
+
+            <button id="close-settings-btn" class="btn btn-secondary">Back to Menu</button>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameover-screen" class="overlay-screen hidden">
+            <h2 class="gameover-title">FLIGHT OVER</h2>
+            <p id="new-best-badge" class="hidden">NEW PERSONAL BEST!</p>
+
+            <div class="scorecard-container">
+                <div class="scorecard-row">
+                    <span class="score-label">SCORE</span>
+                    <span id="final-score" class="score-value">0</span>
+                </div>
+                <hr>
+                <div class="scorecard-row">
+                    <span class="score-label">BEST</span>
+                    <span id="final-best" class="score-value">0</span>
+                </div>
+                <div id="medal-section" class="scorecard-row medal-row hidden">
+                    <span class="score-label">MEDAL</span>
+                    <div class="medal-wrapper">
+                        <span id="medal-icon">🏆</span>
+                        <span id="medal-name">Neon Gold</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="achievement-banner" class="achievement-toast hidden">
+                <div class="toast-icon">✨</div>
+                <div class="toast-content">
+                    <span class="toast-title">Achievement Unlocked!</span>
+                    <span id="achievement-name" class="toast-desc">Sky Conqueror</span>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="restart-game-btn" class="btn btn-primary">Fly Again</button>
+                <button id="menu-game-btn" class="btn btn-secondary">Main Menu</button>
+            </div>
+        </div>
+
+        <!-- Pause Screen -->
+        <div id="pause-screen" class="overlay-screen hidden">
+            <h2 class="pause-title">PAUSED</h2>
+            <p class="pause-subtitle">Press ESC or P to resume</p>
+            <div class="action-buttons vertical">
+                <button id="resume-btn" class="btn btn-primary">Resume</button>
+                <button id="pause-menu-btn" class="btn btn-secondary">Quit to Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script files -->
+    <script src="js/audio.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/ui.js"></script>
+</body>
+</html>
