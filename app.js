@@ -21,7 +21,7 @@ const heroUploadBtn = document.getElementById('heroUploadBtn');
 const closeUploadBtn = document.getElementById('closeUploadBtn');
 const cancelUploadBtn = document.getElementById('cancelUploadBtn');
 
-// Default Seeded Apps
+// Default Release Apps (Zero fake downloads & zero fake reviews)
 const DEFAULT_APPS = [
   {
     id: "flapmaster",
@@ -29,9 +29,9 @@ const DEFAULT_APPS = [
     developer: "Aditya Kewat",
     category: "Games",
     subcategory: "Arcade",
-    rating: 4.9,
-    ratingCount: 1850,
-    downloads: 24500,
+    rating: 0.0,
+    ratingCount: 0,
+    downloads: 0,
     size: "18.5 MB",
     version: "2.1.0",
     packageName: "com.adityakewat.flapmaster",
@@ -46,7 +46,7 @@ const DEFAULT_APPS = [
       "uploads/screenshots/fm3.jpeg",
       "uploads/screenshots/fm4.jpeg"
     ],
-    reviews: [{ user: "Alex Rivera", rating: 5, date: "2026-08-24", comment: "Smooth gameplay, great tail feather particles and lucky wheel rewards!" }]
+    reviews: []
   },
   {
     id: "statussaver",
@@ -54,9 +54,9 @@ const DEFAULT_APPS = [
     developer: "Aditya Kewat",
     category: "Tools",
     subcategory: "Utilities",
-    rating: 4.9,
-    ratingCount: 3420,
-    downloads: 42080,
+    rating: 0.0,
+    ratingCount: 0,
+    downloads: 0,
     size: "22.1 MB",
     version: "1.4.2",
     packageName: "com.statussaver.app",
@@ -71,7 +71,7 @@ const DEFAULT_APPS = [
       "uploads/screenshots/ss3.jpeg",
       "uploads/screenshots/ss4.jpeg"
     ],
-    reviews: [{ user: "Rohan Mehta", rating: 5, date: "2026-08-25", comment: "Super fast video downloads and status saver. Highly recommended tool!" }]
+    reviews: []
   },
   {
     id: "blastgrid",
@@ -79,9 +79,9 @@ const DEFAULT_APPS = [
     developer: "Aditya Kewat",
     category: "Games",
     subcategory: "Arcade",
-    rating: 4.8,
-    ratingCount: 960,
-    downloads: 12800,
+    rating: 0.0,
+    ratingCount: 0,
+    downloads: 0,
     size: "16.2 MB",
     version: "1.0.0",
     packageName: "com.adityakewat.blastgrid",
@@ -96,14 +96,12 @@ const DEFAULT_APPS = [
       "uploads/screenshots/bg3.jpeg",
       "uploads/screenshots/bg4.jpeg"
     ],
-    reviews: [{ user: "Vikram S.", rating: 5, date: "2026-08-25", comment: "Addictive grid brick buster! Great sound effects and ball physics." }]
+    reviews: []
   }
 ];
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-  // Reset localStorage to pull fresh app icons
-  localStorage.setItem('appsphere_apps', JSON.stringify(DEFAULT_APPS));
   loadApps();
   setupEvents();
 });
@@ -168,6 +166,7 @@ function renderApps(apps) {
   apps.forEach(app => {
     const card = document.createElement('div');
     card.className = 'app-card';
+    card.setAttribute('data-id', app.id);
     card.innerHTML = `
       <div>
         <div class="card-top">
@@ -182,8 +181,8 @@ function renderApps(apps) {
       </div>
 
       <div class="card-bottom">
-        <span class="rating-badge">★ ${(app.rating || 5.0).toFixed(1)}</span>
-        <span class="download-text">${formatDownloads(app.downloads)} downloads</span>
+        <span class="rating-badge">${app.ratingCount > 0 ? `★ ${app.rating.toFixed(1)}` : 'New'}</span>
+        <span class="download-text card-downloads">${formatDownloads(app.downloads)}</span>
       </div>
     `;
 
@@ -256,9 +255,9 @@ async function openAppDetail(appId) {
     document.getElementById('modalVersion').textContent = `v${app.version}`;
     document.getElementById('modalBadge').textContent = app.badge || 'Verified';
 
-    document.getElementById('modalRating').textContent = `${(app.rating || 5.0).toFixed(1)} ★`;
-    document.getElementById('modalReviewCount').textContent = `${app.ratingCount || 1} Reviews`;
-    document.getElementById('modalDownloads').textContent = `${formatDownloads(app.downloads)}+`;
+    document.getElementById('modalRating').textContent = app.ratingCount > 0 ? `${app.rating.toFixed(1)} ★` : 'New';
+    document.getElementById('modalReviewCount').textContent = `${app.ratingCount || 0} Reviews`;
+    document.getElementById('modalDownloads').textContent = formatDownloads(app.downloads);
     document.getElementById('modalSize').textContent = app.size || '15 MB';
 
     document.getElementById('modalDescription').textContent = app.description;
@@ -294,15 +293,32 @@ async function openAppDetail(appId) {
   }
 }
 
-// Download APK Handler
+// Real-Time Download APK Handler
 async function downloadApk(app) {
   try {
     app.downloads = (app.downloads || 0) + 1;
-    document.getElementById('modalDownloads').textContent = `${formatDownloads(app.downloads)}+`;
+    
+    // Update live modal stat
+    document.getElementById('modalDownloads').textContent = formatDownloads(app.downloads);
+    
+    // Update live grid card stat
+    const cardEl = document.querySelector(`.app-card[data-id="${app.id}"] .card-downloads`);
+    if (cardEl) {
+      cardEl.textContent = formatDownloads(app.downloads);
+    }
+
     showToast(`Downloading ${app.title} APK package...`);
 
-    fetch(`/api/apps/${app.id}/download`, { method: 'POST' }).catch(() => {});
+    // POST to backend API for live count increment
+    fetch(`/api/apps/${app.id}/download`, { method: 'POST' }).then(r => r.json()).then(data => {
+      if (data.downloads) {
+        app.downloads = data.downloads;
+        document.getElementById('modalDownloads').textContent = formatDownloads(app.downloads);
+        if (cardEl) cardEl.textContent = formatDownloads(app.downloads);
+      }
+    }).catch(() => {});
 
+    // Save to localStorage for GitHub Pages static mode persistence
     const localApps = JSON.parse(localStorage.getItem('appsphere_apps') || '[]');
     const target = localApps.find(a => a.id === app.id);
     if (target) {
@@ -310,6 +326,7 @@ async function downloadApk(app) {
       localStorage.setItem('appsphere_apps', JSON.stringify(localApps));
     }
 
+    // Trigger file download
     if (app.apkUrl) {
       const a = document.createElement('a');
       a.href = app.apkUrl;
@@ -331,7 +348,7 @@ function renderReviews(reviews) {
   reviewsContainer.innerHTML = '';
 
   if (reviews.length === 0) {
-    reviewsContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 13px;">No reviews yet. Be the first to leave a review!</p>`;
+    reviewsContainer.innerHTML = `<p style="color: var(--text-secondary); font-size: 13px;">No user reviews yet. Be the first to leave a review!</p>`;
     return;
   }
 
@@ -455,8 +472,19 @@ function setupEvents() {
     const newReview = { user, rating: selectedStarRating, comment, date: new Date().toISOString().split('T')[0] };
     activeApp.reviews = activeApp.reviews || [];
     activeApp.reviews.unshift(newReview);
-    activeApp.ratingCount = (activeApp.ratingCount || 0) + 1;
+    
+    if (activeApp.ratingCount === 0) {
+      activeApp.rating = selectedStarRating;
+      activeApp.ratingCount = 1;
+    } else {
+      const currentAvg = activeApp.rating || 0;
+      const count = activeApp.ratingCount || 1;
+      activeApp.ratingCount = count + 1;
+      activeApp.rating = parseFloat(((currentAvg * count + selectedStarRating) / activeApp.ratingCount).toFixed(1));
+    }
 
+    document.getElementById('modalRating').textContent = `${activeApp.rating.toFixed(1)} ★`;
+    document.getElementById('modalReviewCount').textContent = `${activeApp.ratingCount} Reviews`;
     renderReviews(activeApp.reviews);
     document.getElementById('reviewComment').value = '';
     showToast('Review submitted successfully!');
@@ -471,6 +499,7 @@ function setupEvents() {
     const target = localApps.find(a => a.id === activeApp.id);
     if (target) {
       target.reviews = activeApp.reviews;
+      target.rating = activeApp.rating;
       target.ratingCount = activeApp.ratingCount;
       localStorage.setItem('appsphere_apps', JSON.stringify(localApps));
     }
@@ -480,7 +509,7 @@ function setupEvents() {
     e.preventDefault();
 
     const title = document.getElementById('upTitle').value;
-    const developer = document.getElementById('upDeveloper').value;
+    const developer = document.getElementById('upDeveloper').value || 'Aditya Kewat';
     const category = document.getElementById('upCategory').value;
     const version = document.getElementById('upVersion').value;
     const size = document.getElementById('upSize').value;
@@ -573,12 +602,12 @@ function setupEvents() {
       icon: defaultIcon,
       banner: screenshotsList[0] || defaultIcon,
       apkUrl: apkBase64 || '',
-      badge: 'New Release',
+      badge: 'Release Version',
       screenshots: screenshotsList,
-      rating: 5.0,
-      ratingCount: 1,
-      downloads: 1,
-      reviews: [{ user: 'System Admin', rating: 5, date: new Date().toISOString().split('T')[0], comment: 'App published to AppSphere!' }]
+      rating: 0.0,
+      ratingCount: 0,
+      downloads: 0,
+      reviews: []
     };
 
     localApps.unshift(newApp);
@@ -608,10 +637,11 @@ function readFileAsBase64(file) {
 }
 
 function formatDownloads(num) {
-  if (!num) return '0';
-  if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-  if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-  return num.toString();
+  if (!num || num === 0) return '0 downloads';
+  if (num === 1) return '1 download';
+  if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M downloads';
+  if (num >= 1000) return (num / 1000).toFixed(1) + 'K downloads';
+  return `${num} downloads`;
 }
 
 function showToast(msg) {

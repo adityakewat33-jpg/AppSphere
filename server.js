@@ -55,7 +55,6 @@ const server = http.createServer((req, res) => {
   const pathname = parsedUrl.pathname;
   const method = req.method.toUpperCase();
 
-  // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -64,8 +63,6 @@ const server = http.createServer((req, res) => {
     res.writeHead(204);
     return res.end();
   }
-
-  // --- API ROUTING ---
 
   // GET /api/apps
   if (pathname === '/api/apps' && method === 'GET') {
@@ -121,7 +118,6 @@ const server = http.createServer((req, res) => {
         let apkPath = payload.apkUrl || '';
         let iconPath = payload.icon || 'https://api.iconify.design/material-symbols:android.svg?color=%2300f2fe';
 
-        // Handle Base64 APK File Save
         if (payload.apkBase64 && payload.apkFileName) {
           const apkBuffer = Buffer.from(payload.apkBase64.split(',')[1] || payload.apkBase64, 'base64');
           const cleanFileName = payload.apkFileName.replace(/[^a-zA-Z0-9._-]/g, '_');
@@ -131,7 +127,6 @@ const server = http.createServer((req, res) => {
           apkPath = `/uploads/apks/${cleanFileName}`;
         }
 
-        // Handle Base64 Icon Save
         if (payload.iconBase64 && payload.iconFileName) {
           const iconBuffer = Buffer.from(payload.iconBase64.split(',')[1] || payload.iconBase64, 'base64');
           const cleanIconName = payload.iconFileName.replace(/[^a-zA-Z0-9._-]/g, '_');
@@ -141,7 +136,6 @@ const server = http.createServer((req, res) => {
           iconPath = `/uploads/icons/${cleanIconName}`;
         }
 
-        // Handle Base64 Screenshots Array
         let screenshotPaths = [];
         if (payload.screenshotsBase64 && Array.isArray(payload.screenshotsBase64)) {
           fs.mkdirSync(path.join(UPLOADS_DIR, 'screenshots'), { recursive: true });
@@ -171,12 +165,12 @@ const server = http.createServer((req, res) => {
         const newApp = {
           id: newId,
           title: payload.title || 'Untitled App',
-          developer: payload.developer || 'Independent Creator',
+          developer: payload.developer || 'Aditya Kewat',
           category: payload.category || 'Tools',
           subcategory: payload.subcategory || 'General',
-          rating: 5.0,
-          ratingCount: 1,
-          downloads: 1,
+          rating: 0.0,
+          ratingCount: 0,
+          downloads: 0,
           size: payload.size || '15 MB',
           version: payload.version || '1.0.0',
           packageName: payload.packageName || `com.dev.${newId}`,
@@ -185,16 +179,9 @@ const server = http.createServer((req, res) => {
           description: payload.description || 'No description provided.',
           apkUrl: apkPath,
           playUrl: payload.playUrl || '',
-          badge: 'New Release',
+          badge: 'Release Version',
           screenshots: screenshotPaths,
-          reviews: [
-            {
-              user: 'System Admin',
-              rating: 5,
-              date: new Date().toISOString().split('T')[0],
-              comment: 'App successfully published to AppSphere!'
-            }
-          ]
+          reviews: []
         };
 
         apps.unshift(newApp);
@@ -246,8 +233,8 @@ const server = http.createServer((req, res) => {
         }
 
         const newRating = parseFloat(payload.rating) || 5;
-        const currentCount = app.ratingCount || 1;
-        const currentAvg = app.rating || 5.0;
+        const currentCount = app.ratingCount || 0;
+        const currentAvg = app.rating || 0.0;
 
         app.reviews = app.reviews || [];
         app.reviews.unshift({
@@ -257,8 +244,13 @@ const server = http.createServer((req, res) => {
           comment: payload.comment || 'Great app!'
         });
 
-        app.ratingCount = currentCount + 1;
-        app.rating = parseFloat(((currentAvg * currentCount + newRating) / app.ratingCount).toFixed(1));
+        if (currentCount === 0) {
+          app.rating = newRating;
+          app.ratingCount = 1;
+        } else {
+          app.ratingCount = currentCount + 1;
+          app.rating = parseFloat(((currentAvg * currentCount + newRating) / app.ratingCount).toFixed(1));
+        }
         saveApps(apps);
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -271,7 +263,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // --- STATIC FILES ROUTING ---
+  // STATIC FILES ROUTING
   let filePath = '';
   if (pathname.startsWith('/uploads/')) {
     filePath = path.join(__dirname, pathname);
