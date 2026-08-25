@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AppSphere - Developer Hub & Independent App Market</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+</head>
+<body>
+  <!-- Top Navigation Header -->
+  <header class="navbar">
+    <div class="nav-left">
+      <div class="logo-container" id="brandLogo">
+        <div class="logo-icon-sphere">
+          <span class="iconify" data-icon="material-symbols:rocket-launch-rounded"></span>
+        </div>
+        <div class="brand-text-block">
+          <span class="brand-name">AppSphere</span>
+          <span class="badge-tag">Developer Hub</span>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs">
+        <button class="tab-btn active" data-category="All">
+          <span class="iconify" data-icon="material-symbols:grid-view"></span> All Apps
+        </button>
+        <button class="tab-btn" data-category="Games">
+          <span class="iconify" data-icon="material-symbols:sports-esports"></span> Games
+        </button>
+        <button class="tab-btn" data-category="Tools">
+          <span class="iconify" data-icon="material-symbols:build"></span> Tools
+        </button>
+        <button class="tab-btn" data-category="Arcade">
+          <span class="iconify" data-icon="material-symbols:smart-toy"></span> Arcade
+        </button>
+      </nav>
+    </div>
+
+    <div class="nav-right">
+      <!-- Search Bar -->
+      <div class="search-box">
+        <span class="iconify search-icon" data-icon="material-symbols:search"></span>
+        <input type="text" id="searchInput" placeholder="Search apps, games, developers...">
+        <button id="clearSearch" class="clear-btn" style="display: none;">&times;</button>
+      </div>
+
+      <!-- Upload App Button -->
+      <button class="btn-publish" id="openUploadBtn">
+        <span class="iconify" data-icon="material-symbols:cloud-upload"></span> Upload App
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Store Front Content -->
+  <main class="container">
+    <!-- Featured Hero Banner / Empty State Banner -->
+    <section class="hero-banner" id="heroSection">
+      <div class="hero-content">
+        <span class="hero-badge">✨ Welcome to AppSphere</span>
+        <h1 id="heroTitle">Your Personal App Marketplace</h1>
+        <p id="heroDesc">Publish, manage, and share your custom Android APKs and Web Games. Upload your apps one by one using the Developer Studio!</p>
+        <div class="hero-actions">
+          <button class="btn-primary" id="heroUploadBtn">
+            <span class="iconify" data-icon="material-symbols:add-circle"></span> Upload Your First App
+          </button>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="hero-empty-illustration">
+          <span class="iconify" data-icon="material-symbols:folder-zip-rounded"></span>
+          <p>Ready for your APKs</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Category Filter Chips -->
+    <section class="filter-chips">
+      <span class="filter-label">Filter Category:</span>
+      <button class="chip active" data-filter="All">All Items</button>
+      <button class="chip" data-filter="Games">🎮 Games</button>
+      <button class="chip" data-filter="Tools">🛠️ Tools</button>
+      <button class="chip" data-filter="Arcade">🕹️ Arcade</button>
+      <button class="chip" data-filter="Productivity">⚡ Productivity</button>
+    </section>
+
+    <!-- Apps & Games Grid -->
+    <section class="store-section">
+      <div class="section-header">
+        <h2 id="sectionTitle">All Published Apps</h2>
+        <span id="appCount" class="count-pill">0 Apps Available</span>
+      </div>
+
+      <div class="apps-grid" id="appsGrid">
+        <!-- Empty state or apps rendered dynamically by app.js -->
+      </div>
+    </section>
+  </main>
+
+  <!-- App Detail Modal -->
+  <div class="modal-backdrop" id="detailModal">
+    <div class="modal-card detail-card">
+      <button class="modal-close" id="closeDetailBtn">&times;</button>
+      
+      <div class="detail-header">
+        <img id="modalIcon" src="" alt="App Icon" class="detail-app-icon">
+        <div class="detail-title-block">
+          <h2 id="modalTitle">App Title</h2>
+          <p id="modalDev" class="dev-name">Developer Name</p>
+          <div class="detail-tags">
+            <span id="modalCategory" class="tag-pill">Category</span>
+            <span id="modalVersion" class="tag-pill version">v1.0.0</span>
+            <span id="modalBadge" class="tag-pill badge">Verified</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Bar -->
+      <div class="detail-stats">
+        <div class="stat-item">
+          <span class="stat-val" id="modalRating">5.0 ★</span>
+          <span class="stat-lbl" id="modalReviewCount">1 Review</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-val" id="modalDownloads">0</span>
+          <span class="stat-lbl">Downloads</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-val" id="modalSize">15 MB</span>
+          <span class="stat-lbl">File Size</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="detail-actions">
+        <button class="btn-install" id="downloadApkBtn">
+          <span class="iconify" data-icon="material-symbols:download"></span> Install APK Package
+        </button>
+        <a id="playWebBtn" class="btn-webplay" target="_blank" style="display: none;">
+          <span class="iconify" data-icon="material-symbols:play-arrow"></span> Play Web Version
+        </a>
+      </div>
+
+      <!-- Screenshots Showcase -->
+      <div class="section-block">
+        <h3>Screenshots & Preview</h3>
+        <div class="screenshots-carousel" id="modalScreenshots">
+          <!-- Screenshots inserted dynamically -->
+        </div>
+      </div>
+
+      <!-- About App -->
+      <div class="section-block">
+        <h3>About this App</h3>
+        <p id="modalDescription" class="description-text">Description content...</p>
+        <div class="metadata-grid">
+          <div><strong>Package ID:</strong> <span id="modalPackageName">com.example.app</span></div>
+          <div><strong>Updated:</strong> <span id="modalUpdated">Today</span></div>
+        </div>
+      </div>
+
+      <!-- Reviews Section -->
+      <div class="section-block">
+        <h3>Ratings & Reviews</h3>
+        
+        <!-- Add Review Form -->
+        <div class="add-review-box">
+          <h4>Leave a Review</h4>
+          <div class="star-rating-input">
+            <span class="star-btn" data-val="1">★</span>
+            <span class="star-btn" data-val="2">★</span>
+            <span class="star-btn" data-val="3">★</span>
+            <span class="star-btn" data-val="4">★</span>
+            <span class="star-btn active" data-val="5">★</span>
+          </div>
+          <input type="text" id="reviewName" placeholder="Your Name" value="AppSphere User">
+          <textarea id="reviewComment" rows="2" placeholder="Write your feedback..."></textarea>
+          <button class="btn-submit-review" id="submitReviewBtn">Submit Review</button>
+        </div>
+
+        <div class="reviews-list" id="modalReviewsList">
+          <!-- Reviews inserted dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Developer Studio Upload Modal -->
+  <div class="modal-backdrop" id="uploadModal">
+    <div class="modal-card upload-card">
+      <button class="modal-close" id="closeUploadBtn">&times;</button>
+
+      <div class="upload-header">
+        <div class="upload-icon-circle">
+          <span class="iconify" data-icon="material-symbols:cloud-upload"></span>
+        </div>
+        <div>
+          <h2>Developer Studio - Publish App</h2>
+          <p>Upload your Android APK, app icons, and screenshots</p>
+        </div>
+      </div>
+
+      <form id="uploadForm" class="upload-form">
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>App Title *</label>
+            <input type="text" id="upTitle" placeholder="e.g. FlapMaster" required>
+          </div>
+          <div class="form-group flex-1">
+            <label>Developer / Publisher Name *</label>
+            <input type="text" id="upDeveloper" placeholder="e.g. Rahul Kewat" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Category *</label>
+            <select id="upCategory" required>
+              <option value="Games">Games</option>
+              <option value="Tools">Tools & Utilities</option>
+              <option value="Arcade">Arcade</option>
+              <option value="Productivity">Productivity</option>
+              <option value="Social">Social & Media</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label>Version *</label>
+            <input type="text" id="upVersion" placeholder="1.0.0" value="1.0.0" required>
+          </div>
+          <div class="form-group flex-1">
+            <label>App Size</label>
+            <input type="text" id="upSize" placeholder="15.0 MB" value="15.0 MB">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Package Name (Android Package ID)</label>
+          <input type="text" id="upPackageName" placeholder="e.g. com.adityakewat.flapmaster">
+        </div>
+
+        <div class="form-group">
+          <label>App Description *</label>
+          <textarea id="upDescription" rows="3" placeholder="Describe features, gameplay, or tools provided by your app..." required></textarea>
+        </div>
+
+        <!-- APK File Upload Box -->
+        <div class="form-group">
+          <label>Upload Android APK File (.apk)</label>
+          <div class="file-dropzone" id="apkDropzone">
+            <span class="iconify" data-icon="material-symbols:apk-install"></span>
+            <span id="apkFileName">Click or drag & drop `.apk` file here</span>
+            <input type="file" id="upApkFile" accept=".apk">
+          </div>
+        </div>
+
+        <!-- Icon Image Upload Box -->
+        <div class="form-group">
+          <label>App Icon Image / URL</label>
+          <input type="text" id="upIconUrl" placeholder="Icon URL (optional)...">
+          <input type="file" id="upIconFile" accept="image/*" style="margin-top: 8px;">
+        </div>
+
+        <!-- Screenshots Upload Box -->
+        <div class="form-group">
+          <label>App Screenshots (Upload Images or Paste URLs)</label>
+          <div class="file-dropzone screenshot-dropzone" id="screenshotsDropzone">
+            <span class="iconify" data-icon="material-symbols:add-photo-alternate"></span>
+            <span id="screenshotFilesLabel">Click or drag & drop screenshot images here (multiple allowed)</span>
+            <input type="file" id="upScreenshotFiles" accept="image/*" multiple>
+          </div>
+          <input type="text" id="upScreenshotUrls" placeholder="Or paste image URLs separated by commas..." style="margin-top: 10px;">
+          
+          <!-- Live Preview Thumbnails -->
+          <div id="screenshotPreviews" class="screenshot-previews-row" style="display: none;"></div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" id="cancelUploadBtn">Cancel</button>
+          <button type="submit" class="btn-publish-submit" id="submitAppBtn">
+            <span class="iconify" data-icon="material-symbols:rocket-launch"></span> Publish to AppSphere
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast">App successfully published!</div>
+
+  <script src="app.js"></script>
+</body>
+</html>
