@@ -13,13 +13,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=4">
   <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+
+  <!-- Firebase App & Cloud Firestore SDKs (v10 compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <!-- Google Play Header -->
+  <!-- AppSphere Header -->
   <header class="gp-header">
     <div class="gp-navbar">
       <div class="gp-nav-left">
-        <!-- Official Play Triangle Logo -->
+        <!-- Play Triangle Logo -->
         <a class="gp-logo" href="./" id="brandLogo">
           <svg class="play-triangle-svg" viewBox="0 0 40 40">
             <path fill="#00f076" d="M7 4.5l16.7 16.7L7 37.9c-.6-.7-1-1.7-1-2.9V7.4c0-1.2.4-2.2 1-2.9z"/>
@@ -48,7 +52,7 @@
           <button id="clearSearch" class="gp-search-clear">&times;</button>
         </div>
 
-        <!-- Publish / Play Console Button -->
+        <!-- Publish / Developer Console Button -->
         <button class="gp-btn-publish" id="openUploadBtn">
           <span class="iconify" data-icon="material-symbols:add-circle-outline"></span> Publish App
         </button>
@@ -144,7 +148,7 @@
     </section>
   </main>
 
-  <!-- Google Play App Details Drawer / Modal -->
+  <!-- App Details Drawer / Modal -->
   <div class="gp-modal-backdrop" id="detailModal">
     <div class="gp-modal-dialog">
       <button class="gp-modal-close-btn" id="closeDetailBtn">&times;</button>
@@ -161,15 +165,15 @@
         </div>
       </div>
 
-      <!-- Play Store 3-Stat Metrics Row -->
+      <!-- 3-Stat Metrics Row -->
       <div class="gp-metrics-row">
         <div class="gp-metric-col">
-          <span class="gp-metric-val" id="modalRating">4.9 <span class="iconify" data-icon="material-symbols:star" style="color:#fbbc04;font-size:14px;"></span></span>
-          <span class="gp-metric-sub" id="modalReviewCount">1K reviews</span>
+          <span class="gp-metric-val" id="modalRating">New</span>
+          <span class="gp-metric-sub" id="modalReviewCount">0 reviews</span>
         </div>
         <div class="gp-metric-divider"></div>
         <div class="gp-metric-col">
-          <span class="gp-metric-val" id="modalDownloads">10K+</span>
+          <span class="gp-metric-val" id="modalDownloads">0+</span>
           <span class="gp-metric-sub">Downloads</span>
         </div>
         <div class="gp-metric-divider"></div>
@@ -251,7 +255,7 @@
         </div>
       </div>
 
-      <!-- Data Safety Box (Official Google Play Feature) -->
+      <!-- Data Safety Box -->
       <div class="gp-data-safety-box">
         <div class="gp-data-safety-title">
           <span class="iconify" data-icon="material-symbols:shield-outline"></span>
@@ -284,16 +288,16 @@
         <!-- Rating Breakdown Card -->
         <div class="gp-rating-breakdown-card">
           <div class="gp-rating-score-box">
-            <div class="gp-rating-big-num" id="breakdownRatingNum">4.9</div>
+            <div class="gp-rating-big-num" id="breakdownRatingNum">0.0</div>
             <div class="gp-rating-stars-gold">★★★★★</div>
-            <div class="gp-rating-total-txt" id="breakdownReviewsCount">1,850 reviews</div>
+            <div class="gp-rating-total-txt" id="breakdownReviewsCount">No reviews yet</div>
           </div>
           <div class="gp-rating-bars-col">
-            <div class="gp-bar-row"><span>5</span><div class="gp-bar-track"><div class="gp-bar-fill" style="width: 85%;"></div></div></div>
-            <div class="gp-bar-row"><span>4</span><div class="gp-bar-track"><div class="gp-bar-fill" style="width: 10%;"></div></div></div>
-            <div class="gp-bar-row"><span>3</span><div class="gp-bar-track"><div class="gp-bar-fill" style="width: 3%;"></div></div></div>
-            <div class="gp-bar-row"><span>2</span><div class="gp-bar-track"><div class="gp-bar-fill" style="width: 1%;"></div></div></div>
-            <div class="gp-bar-row"><span>1</span><div class="gp-bar-track"><div class="gp-bar-fill" style="width: 1%;"></div></div></div>
+            <div class="gp-bar-row"><span>5</span><div class="gp-bar-track"><div class="gp-bar-fill" style="width: 0%;"></div></div></div>
+            <div class="gp-bar-row"><span>4</span><div class="gp-bar-track"><div class="gp-bar-fill" style="width: 0%;"></div></div></div>
+            <div class="gp-bar-row"><span>3</span><div class="gp-bar-track"><div class="gp-bar-fill" style="width: 0%;"></div></div></div>
+            <div class="gp-bar-row"><span>2</span><div class="gp-bar-track"><div class="gp-bar-fill" style="width: 0%;"></div></div></div>
+            <div class="gp-bar-row"><span>1</span><div class="gp-bar-track"><div class="gp-bar-fill" style="width: 0%;"></div></div></div>
           </div>
         </div>
 
@@ -320,7 +324,7 @@
     </div>
   </div>
 
-  <!-- Google Play Console Modal (Developer Upload) -->
+  <!-- AppSphere Developer Console Modal -->
   <div class="gp-modal-backdrop" id="uploadModal">
     <div class="gp-console-modal">
       <button class="gp-modal-close-btn" id="closeUploadBtn">&times;</button>
@@ -422,6 +426,6 @@
     <span id="toastMsg">Action completed successfully</span>
   </div>
 
-  <script src="app.js?v=6"></script>
+  <script src="app.js?v=7"></script>
 </body>
 </html>

@@ -5,12 +5,37 @@ let activeApp = null;
 let selectedStarRating = 5;
 let selectedScreenshotFiles = [];
 
-const DB_VERSION = 'v9_real_zero_mock_playstore';
+const DB_VERSION = 'v10_firebase_realtime_sync';
 
 // Purge any old mock data from browser localStorage
 if (localStorage.getItem('appsphere_db_version') !== DB_VERSION) {
   localStorage.removeItem('appsphere_apps');
   localStorage.setItem('appsphere_db_version', DB_VERSION);
+}
+
+// ===================================================================
+// FIREBASE FIRESTORE CLOUD INTEGRATION
+// ===================================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyBj2iKDxK5R2UlFGOtoNjiBOX-1h_Qbyr8",
+  authDomain: "flappybird-58e4f.firebaseapp.com",
+  projectId: "flappybird-58e4f",
+  storageBucket: "flappybird-58e4f.firebasestorage.app",
+  messagingSenderId: "88313112732",
+  appId: "1:88313112732:web:appsphere"
+};
+
+let db = null;
+try {
+  if (typeof firebase !== 'undefined' && firebase.initializeApp) {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    db = firebase.firestore();
+    console.log("🔥 Firebase Firestore connected successfully to AppSphere!");
+  }
+} catch (e) {
+  console.warn("Firebase initialization notice:", e);
 }
 
 // DOM Elements
@@ -113,9 +138,73 @@ const DEFAULT_APPS = [
 document.addEventListener('DOMContentLoaded', () => {
   loadApps();
   setupEvents();
+  initFirebaseRealtimeListeners();
 });
 
-// Load Apps from API or LocalStorage fallback
+// Realtime Firebase Listeners (Syncs downloads & reviews across all devices worldwide)
+function initFirebaseRealtimeListeners() {
+  if (!db) return;
+
+  // Listen to cloud app downloads and metadata
+  db.collection('apps').onSnapshot(snapshot => {
+    snapshot.docChanges().forEach(change => {
+      const data = change.doc.data();
+      const id = change.doc.id;
+      const app = currentApps.find(a => a.id === id);
+      if (app && data.downloads !== undefined) {
+        app.downloads = data.downloads;
+        updateCardDownloadsInDOM(id, app.downloads);
+        if (activeApp && activeApp.id === id) {
+          document.getElementById('modalDownloads').textContent = formatDownloadsPlayStore(app.downloads);
+        }
+      }
+    });
+  }, err => {
+    console.warn("Firestore apps listener (rules pending?):", err.message);
+  });
+
+  // Listen to cloud reviews
+  db.collection('reviews').onSnapshot(snapshot => {
+    let hasChanges = false;
+    snapshot.forEach(doc => {
+      const rev = doc.data();
+      const app = currentApps.find(a => a.id === rev.appId);
+      if (app) {
+        app.reviews = app.reviews || [];
+        if (!app.reviews.some(r => r.id === doc.id)) {
+          app.reviews.unshift({ id: doc.id, ...rev });
+          hasChanges = true;
+        }
+      }
+    });
+
+    if (hasChanges) {
+      currentApps.forEach(app => {
+        if (app.reviews && app.reviews.length > 0) {
+          app.ratingCount = app.reviews.length;
+          const sum = app.reviews.reduce((acc, r) => acc + (parseFloat(r.rating) || 5), 0);
+          app.rating = parseFloat((sum / app.ratingCount).toFixed(1));
+        }
+      });
+      renderPlayStore(currentApps);
+      if (activeApp) {
+        openAppDetail(activeApp.id);
+      }
+    }
+  }, err => {
+    console.warn("Firestore reviews listener (rules pending?):", err.message);
+  });
+}
+
+function updateCardDownloadsInDOM(appId, count) {
+  const card = document.querySelector(`.gp-app-card[data-id="${appId}"] .gp-card-size`);
+  if (card) {
+    const app = currentApps.find(a => a.id === appId);
+    card.textContent = `${app ? app.size : '15 MB'} · ${count} DL`;
+  }
+}
+
+// Load Apps from API, Firebase, or LocalStorage fallback
 async function loadApps(category = activeCategory, search = '') {
   try {
     let url = '/api/apps?';
@@ -215,7 +304,7 @@ function renderToolsSection(apps) {
   });
 }
 
-// Helper to create Google Play Style App Card
+// Helper to create Play Store Style App Card
 function createAppCard(app, rank = null) {
   const card = document.createElement('div');
   card.className = 'gp-app-card';
@@ -347,7 +436,7 @@ function updateRatingBars(reviews) {
   }
 }
 
-// Download APK / Install Simulation (Google Play Style with real increments)
+// Download APK / Install Simulation (Google Play Style with Firebase real increments)
 async function downloadApk(app) {
   const downloadBtn = document.getElementById('downloadApkBtn');
   if (downloadBtn) {
@@ -358,8 +447,22 @@ async function downloadApk(app) {
 
   app.downloads = (app.downloads || 0) + 1;
   document.getElementById('modalDownloads').textContent = formatDownloadsPlayStore(app.downloads);
+  updateCardDownloadsInDOM(app.id, app.downloads);
 
-  // Sync to API
+  // 1. Sync to Cloud Firebase Firestore (Global Count)
+  if (db) {
+    try {
+      db.collection('apps').doc(app.id).set({
+        downloads: firebase.firestore.FieldValue.increment(1),
+        title: app.title,
+        lastDownloaded: firebase.firestore.FieldValue.serverTimestamp()
+      }, { merge: true }).catch(err => {
+        console.warn("Firestore increment note:", err.message);
+      });
+    } catch (e) {}
+  }
+
+  // 2. Sync to Node.js Local Server API (if online)
   fetch(`/api/apps/${app.id}/download`, { method: 'POST' }).then(r => r.json()).then(data => {
     if (data.downloads) {
       app.downloads = data.downloads;
@@ -367,7 +470,7 @@ async function downloadApk(app) {
     }
   }).catch(() => {});
 
-  // Save to LocalStorage for GitHub Pages persistence
+  // 3. Save to LocalStorage for GitHub Pages persistence
   const localApps = JSON.parse(localStorage.getItem('appsphere_apps') || '[]');
   const target = localApps.find(a => a.id === app.id);
   if (target) {
@@ -493,8 +596,16 @@ function setupEvents() {
     if (!activeApp) return;
     const user = document.getElementById('reviewName').value || 'AppSphere User';
     const comment = document.getElementById('reviewComment').value || 'Great app!';
+    const todayDate = new Date().toISOString().split('T')[0];
 
-    const newRev = { user, rating: selectedStarRating, comment, date: new Date().toISOString().split('T')[0] };
+    const newRev = {
+      appId: activeApp.id,
+      user,
+      rating: selectedStarRating,
+      comment,
+      date: todayDate
+    };
+
     activeApp.reviews = activeApp.reviews || [];
     activeApp.reviews.unshift(newRev);
 
@@ -519,13 +630,28 @@ function setupEvents() {
     document.getElementById('reviewComment').value = '';
     showToast('Review posted to AppSphere!');
 
-    // Sync to API & LocalStorage
+    // 1. Sync Review to Cloud Firebase Firestore
+    if (db) {
+      try {
+        db.collection('reviews').add({
+          appId: activeApp.id,
+          user: user,
+          rating: selectedStarRating,
+          comment: comment,
+          date: todayDate,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        }).catch(err => console.warn("Firestore review save note:", err.message));
+      } catch (e) {}
+    }
+
+    // 2. Sync Review to Node.js local API
     fetch(`/api/apps/${activeApp.id}/review`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user, rating: selectedStarRating, comment })
     }).catch(() => {});
 
+    // 3. Sync Review to LocalStorage
     const localApps = JSON.parse(localStorage.getItem('appsphere_apps') || '[]');
     const target = localApps.find(a => a.id === activeApp.id);
     if (target) {
