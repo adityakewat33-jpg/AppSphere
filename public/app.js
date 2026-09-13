@@ -4,7 +4,7 @@ let activeApp = null;
 let selectedStarRating = 5;
 let selectedScreenshotFiles = [];
 
-const DB_VERSION = 'v3_real_no_mock';
+const DB_VERSION = 'v4_blastgrid_update';
 
 // Clear old mock data cache if version changed
 if (localStorage.getItem('appsphere_db_version') !== DB_VERSION) {
@@ -90,9 +90,9 @@ const DEFAULT_APPS = [
     rating: 0.0,
     ratingCount: 0,
     downloads: 0,
-    size: "16.2 MB",
-    version: "1.0.0",
-    packageName: "com.adityakewat.blastgrid",
+    size: "9.3 MB",
+    version: "1.0",
+    packageName: "com.blastgrid.game",
     icon: "uploads/icons/blastgrid.svg",
     banner: "uploads/screenshots/bg1.jpeg",
     description: "Action-packed brick busting puzzle game! Blast through colorful grids, unlock powerful multi-ball boosters, dynamic particle explosions, and high score challenges.",
