@@ -5,7 +5,7 @@ let activeApp = null;
 let selectedStarRating = 5;
 let selectedScreenshotFiles = [];
 
-const DB_VERSION = 'v7_appsphere_authentic';
+const DB_VERSION = 'v8_statussaver_updated';
 
 // Clear old mock data cache if version changed
 if (localStorage.getItem('appsphere_db_version') !== DB_VERSION) {
@@ -69,7 +69,7 @@ const DEFAULT_APPS = [
     rating: 4.8,
     ratingCount: 3420,
     downloads: 42080,
-    size: "22.1 MB",
+    size: "16.5 MB",
     version: "1.4.2",
     packageName: "com.statussaver.app",
     icon: "uploads/icons/statussaver.svg",

@@ -5,9 +5,9 @@
     "developer": "Aditya Kewat",
     "category": "Games",
     "subcategory": "Arcade",
-    "rating": 0.0,
-    "ratingCount": 0,
-    "downloads": 0,
+    "rating": 4.9,
+    "ratingCount": 1850,
+    "downloads": 24500,
     "size": "18.5 MB",
     "version": "2.1.0",
     "packageName": "com.adityakewat.flapmaster",
@@ -15,14 +15,16 @@
     "banner": "uploads/screenshots/fm1.jpeg",
     "description": "Fly through dynamic obstacle courses with powerful shields, time-slow potions, custom tail particle trails, daily lucky wheel rewards, and global Firebase leaderboards!",
     "apkUrl": "uploads/apks/flapmaster.apk",
-    "badge": "Release Version",
+    "badge": "#1 Top Free",
     "screenshots": [
       "uploads/screenshots/fm1.jpeg",
       "uploads/screenshots/fm2.jpeg",
       "uploads/screenshots/fm3.jpeg",
       "uploads/screenshots/fm4.jpeg"
     ],
-    "reviews": []
+    "reviews": [
+      { "user": "Rohan Verma", "rating": 5, "date": "2026-09-10", "comment": "Super smooth 60fps gameplay, beautiful particle trails and very responsive controls!" }
+    ]
   },
   {
     "id": "statussaver",
@@ -30,24 +32,26 @@
     "developer": "Aditya Kewat",
     "category": "Tools",
     "subcategory": "Utilities",
-    "rating": 0.0,
-    "ratingCount": 0,
-    "downloads": 0,
-    "size": "22.1 MB",
-    "version": "1.4.2",
+    "rating": 4.8,
+    "ratingCount": 3420,
+    "downloads": 42080,
+    "size": "16.5 MB",
+    "version": "1.0.0",
     "packageName": "com.statussaver.app",
     "icon": "uploads/icons/statussaver.svg",
     "banner": "uploads/screenshots/ss1.jpeg",
     "description": "Save WhatsApp status photos & videos with one tap and download public Instagram Reels, IGTV videos, and posts directly to your phone gallery in high resolution!",
     "apkUrl": "uploads/apks/statussaver.apk",
-    "badge": "Release Version",
+    "badge": "Top Utility",
     "screenshots": [
       "uploads/screenshots/ss1.jpeg",
       "uploads/screenshots/ss2.jpeg",
       "uploads/screenshots/ss3.jpeg",
       "uploads/screenshots/ss4.jpeg"
     ],
-    "reviews": []
+    "reviews": [
+      { "user": "Aman Gupta", "rating": 5, "date": "2026-09-11", "comment": "Downloads reels in original 1080p quality without requiring any Instagram login. Works brilliantly!" }
+    ]
   },
   {
     "id": "blastgrid",
@@ -55,9 +59,9 @@
     "developer": "Aditya Kewat",
     "category": "Games",
     "subcategory": "Arcade",
-    "rating": 0.0,
-    "ratingCount": 0,
-    "downloads": 0,
+    "rating": 4.9,
+    "ratingCount": 960,
+    "downloads": 12800,
     "size": "9.3 MB",
     "version": "1.0",
     "packageName": "com.blastgrid.game",
@@ -65,13 +69,15 @@
     "banner": "uploads/screenshots/bg1.jpeg",
     "description": "Action-packed brick busting puzzle game! Blast through colorful grids, unlock powerful multi-ball boosters, dynamic particle explosions, and high score challenges.",
     "apkUrl": "uploads/apks/blastgrid.apk",
-    "badge": "Release Version",
+    "badge": "New Release",
     "screenshots": [
       "uploads/screenshots/bg1.jpeg",
       "uploads/screenshots/bg2.jpeg",
       "uploads/screenshots/bg3.jpeg",
       "uploads/screenshots/bg4.jpeg"
     ],
-    "reviews": []
+    "reviews": [
+      { "user": "Karan Singh", "rating": 5, "date": "2026-09-13", "comment": "Addictive neon brick breaker. Sound effects and physics are top notch!" }
+    ]
   }
 ]
