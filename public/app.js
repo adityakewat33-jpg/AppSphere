@@ -5,7 +5,7 @@ let activeApp = null;
 let selectedStarRating = 5;
 let selectedScreenshotFiles = [];
 
-const DB_VERSION = 'v6_google_play_authentic';
+const DB_VERSION = 'v7_appsphere_authentic';
 
 // Clear old mock data cache if version changed
 if (localStorage.getItem('appsphere_db_version') !== DB_VERSION) {
@@ -305,7 +305,7 @@ async function openAppDetail(appId) {
     document.getElementById('shareAppBtn').onclick = () => {
       const shareUrl = window.location.href;
       if (navigator.share) {
-        navigator.share({ title: app.title, text: `Check out ${app.title} on Google Play!`, url: shareUrl }).catch(() => {});
+        navigator.share({ title: app.title, text: `Check out ${app.title} on AppSphere!`, url: shareUrl }).catch(() => {});
       } else {
         navigator.clipboard.writeText(shareUrl).then(() => showToast('Link copied to clipboard!'));
       }
@@ -466,7 +466,7 @@ function setupEvents() {
   // Submit Review Form
   document.getElementById('submitReviewBtn').addEventListener('click', () => {
     if (!activeApp) return;
-    const user = document.getElementById('reviewName').value || 'Google Play User';
+    const user = document.getElementById('reviewName').value || 'AppSphere User';
     const comment = document.getElementById('reviewComment').value || 'Great app!';
 
     const newRev = { user, rating: selectedStarRating, comment, date: 'Today' };
@@ -475,7 +475,7 @@ function setupEvents() {
 
     renderReviews(activeApp.reviews);
     document.getElementById('reviewComment').value = '';
-    showToast('Review posted to Google Play!');
+    showToast('Review posted to AppSphere!');
 
     // Sync to API & LocalStorage
     fetch(`/api/apps/${activeApp.id}/review`, {
@@ -578,7 +578,7 @@ function setupEvents() {
       if (res.ok) {
         uploadModal.classList.remove('active');
         document.getElementById('uploadForm').reset();
-        showToast(`🎉 "${title}" published to Google Play!`);
+        showToast(`🎉 "${title}" published to AppSphere!`);
         loadApps();
         return;
       }
@@ -605,7 +605,7 @@ function setupEvents() {
     localStorage.setItem('appsphere_apps', JSON.stringify(localApps));
     uploadModal.classList.remove('active');
     document.getElementById('uploadForm').reset();
-    showToast(`🎉 "${title}" published to Google Play!`);
+    showToast(`🎉 "${title}" published to AppSphere!`);
     loadApps();
   });
 }
