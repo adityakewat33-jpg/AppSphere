@@ -6,287 +6,410 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>AppSphere - Developer Hub & Independent App Market</title>
-  <link rel="stylesheet" href="styles.css?v=2">
+  <title>Google Play</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath fill='%2300f076' d='M5 3.5l17.7 17.7L5 38.9c-.6-.7-1-1.7-1-2.9V6.4c0-1.2.4-2.2 1-2.9z'/%3E%3Cpath fill='%23ffba00' d='M29.5 28.1l-6.8-6.9 6.8-6.9 6.3 3.6c1.8 1 1.8 2.7 0 3.8l-6.3 6.4z'/%3E%3Cpath fill='%23ff3344' d='M22.7 21.2L5 38.9c.7.8 1.9 1 3 .4l21.5-12.3-6.8-5.8z'/%3E%3Cpath fill='%230086f4' d='M22.7 21.2L29.5 14.3 8 2c-1.1-.6-2.3-.4-3 .4l17.7 18.8z'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=4">
   <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
 </head>
 <body>
-  <!-- Top Navigation Header -->
-  <header class="navbar">
-    <div class="nav-left">
-      <div class="logo-container" id="brandLogo">
-        <div class="logo-icon-sphere">
-          <span class="iconify" data-icon="material-symbols:rocket-launch-rounded"></span>
-        </div>
-        <div class="brand-text-block">
-          <span class="brand-name">AppSphere</span>
-          <span class="badge-tag">Developer Hub</span>
-        </div>
+  <!-- Google Play Header -->
+  <header class="gp-header">
+    <div class="gp-navbar">
+      <div class="gp-nav-left">
+        <!-- Official Play Triangle Logo -->
+        <a class="gp-logo" href="./" id="brandLogo">
+          <svg class="play-triangle-svg" viewBox="0 0 40 40">
+            <path fill="#00f076" d="M7 4.5l16.7 16.7L7 37.9c-.6-.7-1-1.7-1-2.9V7.4c0-1.2.4-2.2 1-2.9z"/>
+            <path fill="#ffba00" d="M30.5 28.1l-6.8-6.9 6.8-6.9 5.3 3.1c1.8 1 1.8 2.7 0 3.8l-5.3 6.9z"/>
+            <path fill="#ff3344" d="M23.7 21.2L7 37.9c.7.8 1.9 1 3 .4l20.5-11.7-6.8-5.4z"/>
+            <path fill="#0086f4" d="M23.7 21.2L30.5 14.3 10 2.5c-1.1-.6-2.3-.4-3 .4l16.7 18.3z"/>
+          </svg>
+          <span class="gp-brand-title">Google Play <span>Market</span></span>
+        </a>
+
+        <!-- Main Category Tabs -->
+        <nav class="gp-main-tabs">
+          <button class="gp-tab-btn active" data-category="All">Games</button>
+          <button class="gp-tab-btn" data-category="Tools">Apps</button>
+          <button class="gp-tab-btn" data-category="Arcade">Movies & TV</button>
+          <button class="gp-tab-btn" data-category="Kids">Kids</button>
+        </nav>
       </div>
 
-      <!-- Navigation Tabs -->
-      <nav class="nav-tabs">
-        <button class="tab-btn active" data-category="All">
-          <span class="iconify" data-icon="material-symbols:grid-view"></span> All Apps
+      <!-- Right Action Bar -->
+      <div class="gp-nav-right">
+        <!-- Search Bar -->
+        <div class="gp-search-wrapper">
+          <span class="iconify gp-search-icon" data-icon="material-symbols:search"></span>
+          <input type="text" id="searchInput" class="gp-search-input" placeholder="Search apps & games">
+          <button id="clearSearch" class="gp-search-clear">&times;</button>
+        </div>
+
+        <!-- Publish / Play Console Button -->
+        <button class="gp-btn-publish" id="openUploadBtn">
+          <span class="iconify" data-icon="material-symbols:add-circle-outline"></span> Publish App
         </button>
-        <button class="tab-btn" data-category="Games">
-          <span class="iconify" data-icon="material-symbols:sports-esports"></span> Games
-        </button>
-        <button class="tab-btn" data-category="Tools">
-          <span class="iconify" data-icon="material-symbols:build"></span> Tools
-        </button>
-        <button class="tab-btn" data-category="Arcade">
-          <span class="iconify" data-icon="material-symbols:smart-toy"></span> Arcade
-        </button>
-      </nav>
+
+        <!-- User Avatar Profile -->
+        <div class="gp-user-avatar" title="Aditya Kewat (Developer)">A</div>
+      </div>
     </div>
 
-    <div class="nav-right">
-      <!-- Search Bar -->
-      <div class="search-box">
-        <span class="iconify search-icon" data-icon="material-symbols:search"></span>
-        <input type="text" id="searchInput" placeholder="Search apps, games, developers...">
-        <button id="clearSearch" class="clear-btn" style="display: none;">&times;</button>
+    <!-- Device Filter Chips Bar -->
+    <div class="gp-device-bar">
+      <div class="gp-device-inner">
+        <button class="gp-device-pill active" data-device="phone">
+          <span class="iconify" data-icon="material-symbols:phone-android"></span> Phone
+        </button>
+        <button class="gp-device-pill" data-device="tablet">
+          <span class="iconify" data-icon="material-symbols:tablet-android"></span> Tablet
+        </button>
+        <button class="gp-device-pill" data-device="tv">
+          <span class="iconify" data-icon="material-symbols:tv"></span> TV
+        </button>
+        <button class="gp-device-pill" data-device="chromebook">
+          <span class="iconify" data-icon="material-symbols:laptop-chromebook"></span> Chromebook
+        </button>
+        <button class="gp-device-pill" data-device="watch">
+          <span class="iconify" data-icon="material-symbols:watch"></span> Watch
+        </button>
       </div>
-
-      <!-- Upload App Button -->
-      <button class="btn-publish" id="openUploadBtn">
-        <span class="iconify" data-icon="material-symbols:cloud-upload"></span> Upload App
-      </button>
     </div>
   </header>
 
   <!-- Main Store Front Content -->
-  <main class="container">
-    <!-- Featured Hero Banner / Empty State Banner -->
-    <section class="hero-banner" id="heroSection">
-      <div class="hero-content">
-        <span class="hero-badge">✨ Welcome to AppSphere</span>
-        <h1 id="heroTitle">Your Personal App Marketplace</h1>
-        <p id="heroDesc">Publish, manage, and share your custom Android APKs and Web Games. Upload your apps one by one using the Developer Studio!</p>
-        <div class="hero-actions">
-          <button class="btn-primary" id="heroUploadBtn">
-            <span class="iconify" data-icon="material-symbols:add-circle"></span> Upload Your First App
-          </button>
+  <main class="gp-container">
+    <!-- Featured Hero Spotlight Card -->
+    <section class="gp-featured-spotlight" id="spotlightSection">
+      <div class="gp-spotlight-card" id="spotlightCard">
+        <div class="gp-spotlight-info">
+          <span class="gp-spotlight-badge">Featured on Google Play</span>
+          <h1 class="gp-spotlight-title" id="spotlightTitle">FlapMaster Arcade</h1>
+          <p class="gp-spotlight-dev" id="spotlightDev">Aditya Kewat</p>
+          <p class="gp-spotlight-desc" id="spotlightDesc">Fly through dynamic obstacle courses with powerful shields, time-slow potions, custom tail particle trails, and global leaderboards!</p>
+          <div class="gp-spotlight-actions">
+            <button class="gp-btn-install-main" id="spotlightInstallBtn">
+              <span class="iconify" data-icon="material-symbols:download"></span> Install
+            </button>
+            <button class="gp-btn-details-ghost" id="spotlightDetailsBtn">Learn more</button>
+          </div>
         </div>
-      </div>
-      <div class="hero-image">
-        <div class="hero-empty-illustration">
-          <span class="iconify" data-icon="material-symbols:folder-zip-rounded"></span>
-          <p>Ready for your APKs</p>
+        <div class="gp-spotlight-media">
+          <img id="spotlightImg" class="gp-spotlight-img" src="uploads/screenshots/fm1.jpeg" alt="Featured App">
         </div>
       </div>
     </section>
 
-    <!-- Category Filter Chips -->
-    <section class="filter-chips">
-      <span class="filter-label">Filter Category:</span>
-      <button class="chip active" data-filter="All">All Items</button>
-      <button class="chip" data-filter="Games">🎮 Games</button>
-      <button class="chip" data-filter="Tools">🛠️ Tools</button>
-      <button class="chip" data-filter="Arcade">🕹️ Arcade</button>
-      <button class="chip" data-filter="Productivity">⚡ Productivity</button>
+    <!-- Section 1: Top Charts / Popular Games -->
+    <section class="gp-section">
+      <div class="gp-section-header">
+        <div class="gp-section-title-wrap">
+          <h2 class="gp-section-title" id="topChartsTitle">Top Charts</h2>
+          <span class="gp-section-sub">Top free games & apps</span>
+        </div>
+        <a class="gp-section-see-all" id="seeAllBtn">See more <span class="iconify" data-icon="material-symbols:arrow-forward"></span></a>
+      </div>
+      <div class="gp-apps-row" id="topChartsGrid">
+        <!-- Top Charts App Cards rendered here -->
+      </div>
     </section>
 
-    <!-- Apps & Games Grid -->
-    <section class="store-section">
-      <div class="section-header">
-        <h2 id="sectionTitle">All Published Apps</h2>
-        <span id="appCount" class="count-pill">0 Apps Available</span>
+    <!-- Section 2: Recommended For You -->
+    <section class="gp-section">
+      <div class="gp-section-header">
+        <div class="gp-section-title-wrap">
+          <h2 class="gp-section-title">Recommended for you</h2>
+          <span class="gp-section-sub">Based on your recent activity</span>
+        </div>
       </div>
+      <div class="gp-apps-row" id="recommendedGrid">
+        <!-- Recommended App Cards rendered here -->
+      </div>
+    </section>
 
-      <div class="apps-grid" id="appsGrid">
-        <!-- Apps rendered dynamically by app.js -->
+    <!-- Section 3: Tools & Productivity -->
+    <section class="gp-section">
+      <div class="gp-section-header">
+        <div class="gp-section-title-wrap">
+          <h2 class="gp-section-title">Essential utilities & tools</h2>
+          <span class="gp-section-sub">Popular daily apps</span>
+        </div>
+      </div>
+      <div class="gp-apps-row" id="toolsGrid">
+        <!-- Utility App Cards rendered here -->
       </div>
     </section>
   </main>
 
-  <!-- App Detail Modal -->
-  <div class="modal-backdrop" id="detailModal">
-    <div class="modal-card detail-card">
-      <button class="modal-close" id="closeDetailBtn">&times;</button>
-      
-      <div class="detail-header">
-        <img id="modalIcon" src="" alt="App Icon" class="detail-app-icon">
-        <div class="detail-title-block">
-          <h2 id="modalTitle">App Title</h2>
-          <p id="modalDev" class="dev-name">Developer Name</p>
-          <div class="detail-tags">
-            <span id="modalCategory" class="tag-pill">Category</span>
-            <span id="modalVersion" class="tag-pill version">v1.0.0</span>
-            <span id="modalBadge" class="tag-pill badge">Verified</span>
+  <!-- Google Play App Details Drawer / Modal -->
+  <div class="gp-modal-backdrop" id="detailModal">
+    <div class="gp-modal-dialog">
+      <button class="gp-modal-close-btn" id="closeDetailBtn">&times;</button>
+
+      <!-- App Header Block -->
+      <div class="gp-detail-header-section">
+        <img id="modalIcon" src="" alt="App Icon" class="gp-detail-app-icon">
+        <div class="gp-detail-main-info">
+          <h2 id="modalTitle" class="gp-detail-title">App Title</h2>
+          <p id="modalDev" class="gp-detail-dev">Developer Name</p>
+          <div class="gp-detail-tags">
+            <span id="modalCategory">Arcade</span> · <span>Contains ads</span> · <span>In-app purchases</span>
           </div>
         </div>
       </div>
 
-      <!-- Stats Bar -->
-      <div class="detail-stats">
-        <div class="stat-item">
-          <span class="stat-val" id="modalRating">New</span>
-          <span class="stat-lbl" id="modalReviewCount">0 Reviews</span>
+      <!-- Play Store 3-Stat Metrics Row -->
+      <div class="gp-metrics-row">
+        <div class="gp-metric-col">
+          <span class="gp-metric-val" id="modalRating">4.9 <span class="iconify" data-icon="material-symbols:star" style="color:#fbbc04;font-size:14px;"></span></span>
+          <span class="gp-metric-sub" id="modalReviewCount">1K reviews</span>
         </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <span class="stat-val" id="modalDownloads">0 downloads</span>
-          <span class="stat-lbl">Downloads</span>
+        <div class="gp-metric-divider"></div>
+        <div class="gp-metric-col">
+          <span class="gp-metric-val" id="modalDownloads">10K+</span>
+          <span class="gp-metric-sub">Downloads</span>
         </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <span class="stat-val" id="modalSize">15 MB</span>
-          <span class="stat-lbl">File Size</span>
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="detail-actions">
-        <button class="btn-install" id="downloadApkBtn">
-          <span class="iconify" data-icon="material-symbols:download"></span> Install APK Package
-        </button>
-        <a id="playWebBtn" class="btn-webplay" target="_blank" style="display: none;">
-          <span class="iconify" data-icon="material-symbols:play-arrow"></span> Play Web Version
-        </a>
-      </div>
-
-      <!-- Screenshots Showcase -->
-      <div class="section-block">
-        <h3>Screenshots & Preview</h3>
-        <div class="screenshots-carousel" id="modalScreenshots">
-          <!-- Screenshots inserted dynamically -->
+        <div class="gp-metric-divider"></div>
+        <div class="gp-metric-col">
+          <span class="gp-metric-val"><span class="gp-metric-badge-box">3+</span></span>
+          <span class="gp-metric-sub">Rated for 3+</span>
         </div>
       </div>
 
-      <!-- About App -->
-      <div class="section-block">
-        <h3>About this App</h3>
-        <p id="modalDescription" class="description-text">Description content...</p>
-        <div class="metadata-grid">
-          <div><strong>Package ID:</strong> <span id="modalPackageName">com.example.app</span></div>
-          <div><strong>Updated:</strong> <span id="modalUpdated">Today</span></div>
+      <!-- Install & Share Actions Bar -->
+      <div class="gp-action-bar">
+        <div class="gp-action-btn-row">
+          <button class="gp-btn-install-large" id="downloadApkBtn">
+            <span class="iconify" data-icon="material-symbols:download"></span> Install
+          </button>
+          <button class="gp-btn-share-icon" id="shareAppBtn" title="Share App">
+            <span class="iconify" data-icon="material-symbols:share"></span>
+          </button>
+          <button class="gp-btn-share-icon" id="bookmarkAppBtn" title="Add to Wishlist">
+            <span class="iconify" data-icon="material-symbols:bookmark-border"></span>
+          </button>
+        </div>
+        <div class="gp-device-avail-msg">
+          <span class="iconify" data-icon="material-symbols:check-circle"></span>
+          <span>This app is available for all of your devices</span>
         </div>
       </div>
 
-      <!-- Reviews Section -->
-      <div class="section-block">
-        <h3>Ratings & Reviews</h3>
-        
-        <!-- Add Review Form -->
-        <div class="add-review-box">
-          <h4>Leave a Review</h4>
-          <div class="star-rating-input">
-            <span class="star-btn" data-val="1">★</span>
-            <span class="star-btn" data-val="2">★</span>
-            <span class="star-btn" data-val="3">★</span>
-            <span class="star-btn" data-val="4">★</span>
-            <span class="star-btn active" data-val="5">★</span>
+      <!-- Screenshots Track -->
+      <div class="gp-screenshots-container">
+        <h3 class="gp-screenshots-header">Screenshots</h3>
+        <div class="gp-screenshots-track" id="modalScreenshots">
+          <!-- Screenshot images inserted dynamically -->
+        </div>
+      </div>
+
+      <!-- About this Game / App -->
+      <div class="gp-about-section">
+        <div class="gp-about-header">
+          <h3 class="gp-about-title" id="aboutHeading">About this game</h3>
+          <span class="iconify gp-about-arrow" data-icon="material-symbols:arrow-forward"></span>
+        </div>
+        <p class="gp-about-desc" id="modalDescription">Description content...</p>
+
+        <!-- Feature Tag Chips -->
+        <div class="gp-tags-chips-row">
+          <span class="gp-tag-chip">#1 Top Free</span>
+          <span class="gp-tag-chip">Single player</span>
+          <span class="gp-tag-chip">Stylized</span>
+          <span class="gp-tag-chip">Offline</span>
+        </div>
+
+        <!-- Metadata Info Grid -->
+        <div class="gp-info-meta-grid">
+          <div class="gp-info-meta-item">
+            <div class="lbl">Version</div>
+            <div class="val" id="modalVersion">1.0.0</div>
           </div>
-          <input type="text" id="reviewName" placeholder="Your Name" value="AppSphere User">
-          <textarea id="reviewComment" rows="2" placeholder="Write your feedback..."></textarea>
-          <button class="btn-submit-review" id="submitReviewBtn">Submit Review</button>
+          <div class="gp-info-meta-item">
+            <div class="lbl">Updated on</div>
+            <div class="val" id="modalUpdated">Today</div>
+          </div>
+          <div class="gp-info-meta-item">
+            <div class="lbl">Download Size</div>
+            <div class="val" id="modalSize">15 MB</div>
+          </div>
+          <div class="gp-info-meta-item">
+            <div class="lbl">Requires Android</div>
+            <div class="val">8.0 and up</div>
+          </div>
+          <div class="gp-info-meta-item">
+            <div class="lbl">Package Name</div>
+            <div class="val" id="modalPackageName">com.example.app</div>
+          </div>
+          <div class="gp-info-meta-item">
+            <div class="lbl">Offered by</div>
+            <div class="val" id="modalDevMeta">Aditya Kewat</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Safety Box (Official Google Play Feature) -->
+      <div class="gp-data-safety-box">
+        <div class="gp-data-safety-title">
+          <span class="iconify" data-icon="material-symbols:shield-outline"></span>
+          <span>Data safety</span>
+        </div>
+        <p class="gp-data-safety-desc">Safety starts with understanding how developers collect and share your data. Data privacy and security practices may vary based on your use, region, and age.</p>
+        <ul class="gp-data-safety-list">
+          <li>
+            <span class="iconify" data-icon="material-symbols:share-off-outline"></span>
+            <span>No data shared with third parties</span>
+          </li>
+          <li>
+            <span class="iconify" data-icon="material-symbols:lock-outline"></span>
+            <span>Data is encrypted in transit</span>
+          </li>
+          <li>
+            <span class="iconify" data-icon="material-symbols:verified-user-outline"></span>
+            <span>Committed to follow Play Store families policy</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Ratings and Reviews Section -->
+      <div class="gp-reviews-section">
+        <div class="gp-reviews-header">
+          <h3 class="gp-reviews-title">Ratings and reviews</h3>
+          <span class="iconify gp-about-arrow" data-icon="material-symbols:arrow-forward"></span>
         </div>
 
-        <div class="reviews-list" id="modalReviewsList">
+        <!-- Rating Breakdown Card -->
+        <div class="gp-rating-breakdown-card">
+          <div class="gp-rating-score-box">
+            <div class="gp-rating-big-num" id="breakdownRatingNum">4.9</div>
+            <div class="gp-rating-stars-gold">★★★★★</div>
+            <div class="gp-rating-total-txt" id="breakdownReviewsCount">1,850 reviews</div>
+          </div>
+          <div class="gp-rating-bars-col">
+            <div class="gp-bar-row"><span>5</span><div class="gp-bar-track"><div class="gp-bar-fill" style="width: 85%;"></div></div></div>
+            <div class="gp-bar-row"><span>4</span><div class="gp-bar-track"><div class="gp-bar-fill" style="width: 10%;"></div></div></div>
+            <div class="gp-bar-row"><span>3</span><div class="gp-bar-track"><div class="gp-bar-fill" style="width: 3%;"></div></div></div>
+            <div class="gp-bar-row"><span>2</span><div class="gp-bar-track"><div class="gp-bar-fill" style="width: 1%;"></div></div></div>
+            <div class="gp-bar-row"><span>1</span><div class="gp-bar-track"><div class="gp-bar-fill" style="width: 1%;"></div></div></div>
+          </div>
+        </div>
+
+        <!-- Leave a Review Form -->
+        <div class="gp-add-review-box">
+          <h4>Rate this app</h4>
+          <div class="gp-star-input">
+            <span class="gp-star-btn" data-val="1">★</span>
+            <span class="gp-star-btn" data-val="2">★</span>
+            <span class="gp-star-btn" data-val="3">★</span>
+            <span class="gp-star-btn" data-val="4">★</span>
+            <span class="gp-star-btn active" data-val="5">★</span>
+          </div>
+          <input type="text" id="reviewName" class="gp-review-input" placeholder="Your name" value="Google Play User">
+          <textarea id="reviewComment" class="gp-review-textarea" rows="2" placeholder="Tell others what you think about this app..."></textarea>
+          <button class="gp-btn-submit-review" id="submitReviewBtn">Post Review</button>
+        </div>
+
+        <!-- User Reviews List -->
+        <div class="gp-reviews-list" id="modalReviewsList">
           <!-- Reviews inserted dynamically -->
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Developer Studio Upload Modal -->
-  <div class="modal-backdrop" id="uploadModal">
-    <div class="modal-card upload-card">
-      <button class="modal-close" id="closeUploadBtn">&times;</button>
+  <!-- Google Play Console Modal (Developer Upload) -->
+  <div class="gp-modal-backdrop" id="uploadModal">
+    <div class="gp-console-modal">
+      <button class="gp-modal-close-btn" id="closeUploadBtn">&times;</button>
 
-      <div class="upload-header">
-        <div class="upload-icon-circle">
-          <span class="iconify" data-icon="material-symbols:cloud-upload"></span>
+      <div class="gp-console-header">
+        <div class="gp-console-icon">
+          <span class="iconify" data-icon="material-symbols:rocket-launch"></span>
         </div>
         <div>
-          <h2>Developer Studio - Publish App</h2>
-          <p>Upload your Android APK, app icons, and screenshots</p>
+          <h2>Google Play Console</h2>
+          <p>Publish a new application release or game</p>
         </div>
       </div>
 
-      <form id="uploadForm" class="upload-form">
-        <div class="form-row">
-          <div class="form-group flex-1">
-            <label>App Title *</label>
-            <input type="text" id="upTitle" placeholder="e.g. FlapMaster" required>
+      <form id="uploadForm">
+        <div class="gp-form-row">
+          <div class="gp-form-group gp-flex-1">
+            <label>App Name *</label>
+            <input type="text" id="upTitle" class="gp-form-input" placeholder="e.g. FlapMaster" required>
           </div>
-          <div class="form-group flex-1">
-            <label>Developer / Publisher Name *</label>
-            <input type="text" id="upDeveloper" placeholder="e.g. Aditya Kewat" required>
+          <div class="gp-form-group gp-flex-1">
+            <label>Developer Name *</label>
+            <input type="text" id="upDeveloper" class="gp-form-input" placeholder="e.g. Aditya Kewat" required>
           </div>
         </div>
 
-        <div class="form-row">
-          <div class="form-group flex-1">
+        <div class="gp-form-row">
+          <div class="gp-form-group gp-flex-1">
             <label>Category *</label>
-            <select id="upCategory" required>
-              <option value="Games">Games</option>
+            <select id="upCategory" class="gp-form-select" required>
+              <option value="Games">Games (Arcade, Action)</option>
               <option value="Tools">Tools & Utilities</option>
               <option value="Arcade">Arcade</option>
               <option value="Productivity">Productivity</option>
-              <option value="Social">Social & Media</option>
             </select>
           </div>
-          <div class="form-group flex-1">
-            <label>Version *</label>
-            <input type="text" id="upVersion" placeholder="1.0.0" value="1.0.0" required>
+          <div class="gp-form-group gp-flex-1">
+            <label>Version Name *</label>
+            <input type="text" id="upVersion" class="gp-form-input" placeholder="1.0.0" value="1.0.0" required>
           </div>
-          <div class="form-group flex-1">
+          <div class="gp-form-group gp-flex-1">
             <label>App Size</label>
-            <input type="text" id="upSize" placeholder="15.0 MB" value="15.0 MB">
+            <input type="text" id="upSize" class="gp-form-input" placeholder="15.0 MB" value="15.0 MB">
           </div>
         </div>
 
-        <div class="form-group">
-          <label>Package Name (Android Package ID)</label>
-          <input type="text" id="upPackageName" placeholder="e.g. com.adityakewat.flapmaster">
+        <div class="gp-form-group">
+          <label>Package ID (Android applicationId)</label>
+          <input type="text" id="upPackageName" class="gp-form-input" placeholder="e.g. com.adityakewat.flapmaster">
         </div>
 
-        <div class="form-group">
-          <label>App Description *</label>
-          <textarea id="upDescription" rows="3" placeholder="Describe features, gameplay, or tools provided by your app..." required></textarea>
+        <div class="gp-form-group">
+          <label>Short Description *</label>
+          <textarea id="upDescription" class="gp-form-textarea" rows="3" placeholder="Describe gameplay, features, and functionality..." required></textarea>
         </div>
 
-        <!-- APK File Upload Box -->
-        <div class="form-group">
-          <label>Upload Android APK File (.apk)</label>
-          <div class="file-dropzone" id="apkDropzone">
-            <span class="iconify" data-icon="material-symbols:apk-install"></span>
-            <span id="apkFileName">Click or drag & drop `.apk` file here</span>
+        <!-- Android APK Upload -->
+        <div class="gp-form-group">
+          <label>Android APK Release File (.apk)</label>
+          <div class="gp-file-drop" id="apkDropzone">
+            <span class="iconify" data-icon="material-symbols:android"></span>
+            <span id="apkFileName">Drop or browse `.apk` release package</span>
             <input type="file" id="upApkFile" accept=".apk">
           </div>
         </div>
 
-        <!-- Icon Image Upload Box -->
-        <div class="form-group">
-          <label>App Icon Image / URL</label>
-          <input type="text" id="upIconUrl" placeholder="Icon URL (optional)...">
+        <!-- App Icon -->
+        <div class="gp-form-group">
+          <label>App Icon (512x512 PNG / SVG)</label>
+          <input type="text" id="upIconUrl" class="gp-form-input" placeholder="Or enter icon image URL...">
           <input type="file" id="upIconFile" accept="image/*" style="margin-top: 8px;">
         </div>
 
-        <!-- Screenshots Upload Box -->
-        <div class="form-group">
-          <label>App Screenshots (Upload Images or Paste URLs)</label>
-          <div class="file-dropzone screenshot-dropzone" id="screenshotsDropzone">
+        <!-- Screenshots -->
+        <div class="gp-form-group">
+          <label>App Screenshots (Upload Images)</label>
+          <div class="gp-file-drop" id="screenshotsDropzone">
             <span class="iconify" data-icon="material-symbols:add-photo-alternate"></span>
-            <span id="screenshotFilesLabel">Click or drag & drop screenshot images here (multiple allowed)</span>
+            <span id="screenshotFilesLabel">Drop screenshot images here (multiple allowed)</span>
             <input type="file" id="upScreenshotFiles" accept="image/*" multiple>
           </div>
-          <input type="text" id="upScreenshotUrls" placeholder="Or paste image URLs separated by commas..." style="margin-top: 10px;">
-          
-          <!-- Live Preview Thumbnails -->
-          <div id="screenshotPreviews" class="screenshot-previews-row" style="display: none;"></div>
+          <input type="text" id="upScreenshotUrls" class="gp-form-input" placeholder="Or paste image URLs separated by commas..." style="margin-top: 8px;">
+          <div id="screenshotPreviews" class="gp-previews-strip" style="display: none;"></div>
         </div>
 
-        <div class="form-actions">
-          <button type="button" class="btn-cancel" id="cancelUploadBtn">Cancel</button>
-          <button type="submit" class="btn-publish-submit" id="submitAppBtn">
-            <span class="iconify" data-icon="material-symbols:rocket-launch"></span> Publish to AppSphere
+        <div class="gp-form-actions">
+          <button type="button" class="gp-btn-cancel" id="cancelUploadBtn">Cancel</button>
+          <button type="submit" class="gp-btn-submit" id="submitAppBtn">
+            <span class="iconify" data-icon="material-symbols:publish"></span> Publish to Google Play
           </button>
         </div>
       </form>
@@ -294,8 +417,11 @@
   </div>
 
   <!-- Notification Toast -->
-  <div id="toast" class="toast">App successfully published!</div>
+  <div id="toast" class="gp-toast">
+    <span class="iconify" data-icon="material-symbols:check-circle" style="color:#00f076;"></span>
+    <span id="toastMsg">Action completed successfully</span>
+  </div>
 
-  <script src="app.js?v=3"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>
