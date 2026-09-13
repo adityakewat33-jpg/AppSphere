@@ -4,7 +4,7 @@ let activeApp = null;
 let selectedStarRating = 5;
 let selectedScreenshotFiles = [];
 
-const DB_VERSION = 'v4_blastgrid_update';
+const DB_VERSION = 'v5_blastgrid_update';
 
 // Clear old mock data cache if version changed
 if (localStorage.getItem('appsphere_db_version') !== DB_VERSION) {
