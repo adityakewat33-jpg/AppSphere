@@ -5,9 +5,9 @@ let activeApp = null;
 let selectedStarRating = 5;
 let selectedScreenshotFiles = [];
 
-const DB_VERSION = 'v8_statussaver_updated';
+const DB_VERSION = 'v9_real_zero_mock_playstore';
 
-// Clear old mock data cache if version changed
+// Purge any old mock data from browser localStorage
 if (localStorage.getItem('appsphere_db_version') !== DB_VERSION) {
   localStorage.removeItem('appsphere_apps');
   localStorage.setItem('appsphere_db_version', DB_VERSION);
@@ -30,7 +30,7 @@ const openUploadBtn = document.getElementById('openUploadBtn');
 const closeUploadBtn = document.getElementById('closeUploadBtn');
 const cancelUploadBtn = document.getElementById('cancelUploadBtn');
 
-// Default Seeded Official Release Apps
+// Default Seeded Official Release Apps (Zero mock reviews & zero mock downloads)
 const DEFAULT_APPS = [
   {
     id: "flapmaster",
@@ -38,27 +38,24 @@ const DEFAULT_APPS = [
     developer: "Aditya Kewat",
     category: "Games",
     subcategory: "Arcade",
-    rating: 4.9,
-    ratingCount: 1850,
-    downloads: 24500,
+    rating: 0.0,
+    ratingCount: 0,
+    downloads: 0,
     size: "18.5 MB",
     version: "2.1.0",
     packageName: "com.adityakewat.flapmaster",
     icon: "uploads/icons/flapmaster.png",
     banner: "uploads/screenshots/fm1.jpeg",
-    description: "Fly through dynamic obstacle courses with powerful shields, time-slow potions, custom tail particle trails, daily lucky wheel rewards, and global leaderboards!",
+    description: "Fly through dynamic obstacle courses with powerful shields, time-slow potions, custom tail particle trails, daily lucky wheel rewards, and global Firebase leaderboards!",
     apkUrl: "uploads/apks/flapmaster.apk",
-    badge: "#1 Top Free",
+    badge: "Release Version",
     screenshots: [
       "uploads/screenshots/fm1.jpeg",
       "uploads/screenshots/fm2.jpeg",
       "uploads/screenshots/fm3.jpeg",
       "uploads/screenshots/fm4.jpeg"
     ],
-    reviews: [
-      { user: "Rohan Verma", rating: 5, date: "2026-09-10", comment: "Super smooth 60fps gameplay, beautiful particle trails and very responsive controls!" },
-      { user: "Sneha Patel", rating: 5, date: "2026-09-08", comment: "The daily lucky wheel and power-ups make this way better than the original." }
-    ]
+    reviews: []
   },
   {
     id: "statussaver",
@@ -66,26 +63,24 @@ const DEFAULT_APPS = [
     developer: "Aditya Kewat",
     category: "Tools",
     subcategory: "Utilities",
-    rating: 4.8,
-    ratingCount: 3420,
-    downloads: 42080,
+    rating: 0.0,
+    ratingCount: 0,
+    downloads: 0,
     size: "16.5 MB",
-    version: "1.4.2",
+    version: "1.0.0",
     packageName: "com.statussaver.app",
     icon: "uploads/icons/statussaver.svg",
     banner: "uploads/screenshots/ss1.jpeg",
     description: "Save WhatsApp status photos & videos with one tap and download public Instagram Reels, IGTV videos, and posts directly to your phone gallery in high resolution!",
     apkUrl: "uploads/apks/statussaver.apk",
-    badge: "Top Utility",
+    badge: "Release Version",
     screenshots: [
       "uploads/screenshots/ss1.jpeg",
       "uploads/screenshots/ss2.jpeg",
       "uploads/screenshots/ss3.jpeg",
       "uploads/screenshots/ss4.jpeg"
     ],
-    reviews: [
-      { user: "Aman Gupta", rating: 5, date: "2026-09-11", comment: "Downloads reels in original 1080p quality without requiring any Instagram login. Works brilliantly!" }
-    ]
+    reviews: []
   },
   {
     id: "blastgrid",
@@ -93,9 +88,9 @@ const DEFAULT_APPS = [
     developer: "Aditya Kewat",
     category: "Games",
     subcategory: "Arcade",
-    rating: 4.9,
-    ratingCount: 960,
-    downloads: 12800,
+    rating: 0.0,
+    ratingCount: 0,
+    downloads: 0,
     size: "9.3 MB",
     version: "1.0",
     packageName: "com.blastgrid.game",
@@ -103,16 +98,14 @@ const DEFAULT_APPS = [
     banner: "uploads/screenshots/bg1.jpeg",
     description: "Action-packed brick busting puzzle game! Blast through colorful grids, unlock powerful multi-ball boosters, dynamic particle explosions, and high score challenges.",
     apkUrl: "uploads/apks/blastgrid.apk",
-    badge: "New Release",
+    badge: "Release Version",
     screenshots: [
       "uploads/screenshots/bg1.jpeg",
       "uploads/screenshots/bg2.jpeg",
       "uploads/screenshots/bg3.jpeg",
       "uploads/screenshots/bg4.jpeg"
     ],
-    reviews: [
-      { user: "Karan Singh", rating: 5, date: "2026-09-13", comment: "Addictive neon brick breaker. Sound effects and physics are top notch!" }
-    ]
+    reviews: []
   }
 ];
 
@@ -229,7 +222,7 @@ function createAppCard(app, rank = null) {
   card.setAttribute('data-id', app.id);
 
   const rankBadge = rank ? `<span class="gp-card-rank">#${rank}</span>` : '';
-  const ratingDisplay = app.rating && app.rating > 0 ? `${app.rating.toFixed(1)} ★` : 'New';
+  const ratingDisplay = app.ratingCount && app.ratingCount > 0 ? `${app.rating.toFixed(1)} ★` : 'New';
 
   card.innerHTML = `
     <div class="gp-card-icon-wrap">
@@ -268,13 +261,14 @@ async function openAppDetail(appId) {
     document.getElementById('modalDevMeta').textContent = app.developer;
     document.getElementById('modalCategory').textContent = app.category || 'Arcade';
 
-    const ratingVal = app.rating && app.rating > 0 ? app.rating.toFixed(1) : '4.9';
-    document.getElementById('modalRating').innerHTML = `${ratingVal} <span class="iconify" data-icon="material-symbols:star" style="color:#fbbc04;font-size:14px;"></span>`;
+    const hasReviews = app.ratingCount && app.ratingCount > 0;
+    const ratingVal = hasReviews ? app.rating.toFixed(1) : '0.0';
+    document.getElementById('modalRating').innerHTML = hasReviews ? `${ratingVal} <span class="iconify" data-icon="material-symbols:star" style="color:#fbbc04;font-size:14px;"></span>` : 'New';
     document.getElementById('breakdownRatingNum').textContent = ratingVal;
 
-    const revCount = app.ratingCount && app.ratingCount > 0 ? `${app.ratingCount} reviews` : 'Verified';
+    const revCount = hasReviews ? `${app.ratingCount} reviews` : '0 reviews';
     document.getElementById('modalReviewCount').textContent = revCount;
-    document.getElementById('breakdownReviewsCount').textContent = `${app.ratingCount || 100} total ratings`;
+    document.getElementById('breakdownReviewsCount').textContent = hasReviews ? `${app.ratingCount} total ratings` : 'No reviews yet';
 
     document.getElementById('modalDownloads').textContent = formatDownloadsPlayStore(app.downloads);
     document.getElementById('modalSize').textContent = app.size || '15 MB';
@@ -284,6 +278,9 @@ async function openAppDetail(appId) {
 
     const isGame = (app.category || '').toLowerCase() === 'games' || app.id === 'flapmaster' || app.id === 'blastgrid';
     document.getElementById('aboutHeading').textContent = isGame ? 'About this game' : 'About this app';
+
+    // Update Rating Breakdown Progress Bars
+    updateRatingBars(app.reviews || []);
 
     // Screenshots Gallery
     const track = document.getElementById('modalScreenshots');
@@ -322,7 +319,35 @@ async function openAppDetail(appId) {
   }
 }
 
-// Download APK / Install Simulation (Google Play Style)
+// Calculate and render review progress bars
+function updateRatingBars(reviews) {
+  const barsContainer = document.querySelector('.gp-rating-bars-col');
+  if (!barsContainer) return;
+
+  const counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+  const total = reviews.length;
+
+  reviews.forEach(r => {
+    const star = Math.round(r.rating || 5);
+    if (counts[star] !== undefined) counts[star]++;
+  });
+
+  barsContainer.innerHTML = '';
+  for (let star = 5; star >= 1; star--) {
+    const pct = total > 0 ? Math.round((counts[star] / total) * 100) : 0;
+    const row = document.createElement('div');
+    row.className = 'gp-bar-row';
+    row.innerHTML = `
+      <span>${star}</span>
+      <div class="gp-bar-track">
+        <div class="gp-bar-fill" style="width: ${pct}%;"></div>
+      </div>
+    `;
+    barsContainer.appendChild(row);
+  }
+}
+
+// Download APK / Install Simulation (Google Play Style with real increments)
 async function downloadApk(app) {
   const downloadBtn = document.getElementById('downloadApkBtn');
   if (downloadBtn) {
@@ -372,21 +397,21 @@ function renderReviews(reviews) {
   container.innerHTML = '';
 
   if (!reviews || reviews.length === 0) {
-    container.innerHTML = `<p style="color: var(--gp-text-muted); font-size: 13px;">No user reviews yet. Rate this app to be the first!</p>`;
+    container.innerHTML = `<p style="color: var(--gp-text-muted); font-size: 13px;">No user reviews yet. Rate this app below to be the first!</p>`;
     return;
   }
 
   reviews.forEach(r => {
     const card = document.createElement('div');
     card.className = 'gp-review-card';
-    const initial = (r.user || 'G')[0].toUpperCase();
+    const initial = (r.user || 'U')[0].toUpperCase();
     card.innerHTML = `
       <div class="gp-review-author-row">
         <div class="gp-review-avatar">${initial}</div>
         <span class="gp-review-author-name">${r.user}</span>
       </div>
       <div class="gp-review-stars-date">
-        <span class="stars">${'★'.repeat(r.rating || 5)}</span>
+        <span class="stars">${'★'.repeat(r.rating || 5)}${'☆'.repeat(5 - (r.rating || 5))}</span>
         <span>·</span>
         <span>${r.date || 'Recent'}</span>
       </div>
@@ -469,10 +494,27 @@ function setupEvents() {
     const user = document.getElementById('reviewName').value || 'AppSphere User';
     const comment = document.getElementById('reviewComment').value || 'Great app!';
 
-    const newRev = { user, rating: selectedStarRating, comment, date: 'Today' };
+    const newRev = { user, rating: selectedStarRating, comment, date: new Date().toISOString().split('T')[0] };
     activeApp.reviews = activeApp.reviews || [];
     activeApp.reviews.unshift(newRev);
 
+    // Recalculate real ratings
+    const currentCount = activeApp.ratingCount || 0;
+    const currentAvg = activeApp.rating || 0.0;
+    if (currentCount === 0) {
+      activeApp.rating = selectedStarRating;
+      activeApp.ratingCount = 1;
+    } else {
+      activeApp.ratingCount = currentCount + 1;
+      activeApp.rating = parseFloat(((currentAvg * currentCount + selectedStarRating) / activeApp.ratingCount).toFixed(1));
+    }
+
+    document.getElementById('modalRating').innerHTML = `${activeApp.rating.toFixed(1)} <span class="iconify" data-icon="material-symbols:star" style="color:#fbbc04;font-size:14px;"></span>`;
+    document.getElementById('modalReviewCount').textContent = `${activeApp.ratingCount} reviews`;
+    document.getElementById('breakdownRatingNum').textContent = activeApp.rating.toFixed(1);
+    document.getElementById('breakdownReviewsCount').textContent = `${activeApp.ratingCount} total ratings`;
+
+    updateRatingBars(activeApp.reviews);
     renderReviews(activeApp.reviews);
     document.getElementById('reviewComment').value = '';
     showToast('Review posted to AppSphere!');
@@ -488,6 +530,8 @@ function setupEvents() {
     const target = localApps.find(a => a.id === activeApp.id);
     if (target) {
       target.reviews = activeApp.reviews;
+      target.rating = activeApp.rating;
+      target.ratingCount = activeApp.ratingCount;
       localStorage.setItem('appsphere_apps', JSON.stringify(localApps));
     }
   });
@@ -524,7 +568,7 @@ function setupEvents() {
   document.getElementById('uploadForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const title = document.getElementById('upTitle').value;
-    const developer = document.getElementById('upDeveloper').value;
+    const developer = document.getElementById('upDeveloper').value || 'Aditya Kewat';
     const category = document.getElementById('upCategory').value;
     const version = document.getElementById('upVersion').value;
     const size = document.getElementById('upSize').value;
@@ -598,7 +642,7 @@ function setupEvents() {
       packageName: packageName || `com.play.${newId}`,
       description, icon: defaultIcon, banner: screenshotsList[0] || defaultIcon,
       apkUrl: apkBase64 || '', badge: 'New', screenshots: screenshotsList,
-      rating: 5.0, ratingCount: 1, downloads: 1, reviews: []
+      rating: 0.0, ratingCount: 0, downloads: 0, reviews: []
     };
 
     localApps.unshift(newApp);
