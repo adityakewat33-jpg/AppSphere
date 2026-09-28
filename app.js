@@ -5,7 +5,7 @@ let activeApp = null;
 let selectedStarRating = 5;
 let selectedScreenshotFiles = [];
 
-const DB_VERSION = 'v10_firebase_realtime_sync';
+const DB_VERSION = 'v11_arrow_jam_release';
 
 // Purge any old mock data from browser localStorage
 if (localStorage.getItem('appsphere_db_version') !== DB_VERSION) {
@@ -131,6 +131,32 @@ const DEFAULT_APPS = [
       "uploads/screenshots/bg4.jpeg"
     ],
     reviews: []
+  },
+  {
+    id: "arrowjam",
+    title: "Arrow Jam: Escape & Untangle",
+    developer: "Aditya Kewat",
+    category: "Games",
+    subcategory: "Puzzle",
+    rating: 5.0,
+    ratingCount: 1,
+    downloads: 0,
+    size: "10.0 MB",
+    version: "1.0.0",
+    packageName: "com.example.arrowescape",
+    icon: "uploads/icons/arrowjam.png",
+    banner: "uploads/screenshots/aj1.png",
+    description: "Tap to release the arrows and untangle the grid! A satisfying neon spatial logic puzzle with 200+ progressive levels, 8 customizable themes, OTA dynamic levels, rewarded revives, and 40 achievements.",
+    apkUrl: "uploads/apks/arrowjam.apk",
+    badge: "Release Version",
+    screenshots: [
+      "uploads/screenshots/aj1.png",
+      "uploads/screenshots/aj2.png",
+      "uploads/screenshots/aj3.png",
+      "uploads/screenshots/aj4.png",
+      "uploads/screenshots/aj5.png"
+    ],
+    reviews: []
   }
 ];
 
@@ -216,12 +242,27 @@ async function loadApps(category = activeCategory, search = '') {
     const data = await res.json();
     currentApps = data && data.length > 0 ? data : DEFAULT_APPS;
   } catch (err) {
-    const localData = localStorage.getItem('appsphere_apps');
-    if (localData && JSON.parse(localData).length > 0) {
-      currentApps = JSON.parse(localData);
-    } else {
-      currentApps = DEFAULT_APPS;
-      localStorage.setItem('appsphere_apps', JSON.stringify(DEFAULT_APPS));
+    try {
+      const staticRes = await fetch('./data/apps.json');
+      if (staticRes.ok) {
+        const staticData = await staticRes.json();
+        if (staticData && staticData.length > 0) {
+          currentApps = staticData;
+          localStorage.setItem('appsphere_apps', JSON.stringify(currentApps));
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+
+    if (!currentApps || currentApps.length === 0) {
+      const localData = localStorage.getItem('appsphere_apps');
+      if (localData && JSON.parse(localData).length > 0) {
+        currentApps = JSON.parse(localData);
+      } else {
+        currentApps = DEFAULT_APPS;
+        localStorage.setItem('appsphere_apps', JSON.stringify(DEFAULT_APPS));
+      }
     }
 
     if (category && category !== 'All') {

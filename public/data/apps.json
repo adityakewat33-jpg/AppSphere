@@ -1,0 +1,103 @@
+[
+  {
+    "id": "flapmaster",
+    "title": "FlapMaster Arcade",
+    "developer": "Aditya Kewat",
+    "category": "Games",
+    "subcategory": "Arcade",
+    "rating": 0.0,
+    "ratingCount": 0,
+    "downloads": 0,
+    "size": "18.5 MB",
+    "version": "2.1.0",
+    "packageName": "com.adityakewat.flapmaster",
+    "icon": "uploads/icons/flapmaster.png",
+    "banner": "uploads/screenshots/fm1.jpeg",
+    "description": "Fly through dynamic obstacle courses with powerful shields, time-slow potions, custom tail particle trails, daily lucky wheel rewards, and global Firebase leaderboards!",
+    "apkUrl": "uploads/apks/flapmaster.apk",
+    "badge": "Release Version",
+    "screenshots": [
+      "uploads/screenshots/fm1.jpeg",
+      "uploads/screenshots/fm2.jpeg",
+      "uploads/screenshots/fm3.jpeg",
+      "uploads/screenshots/fm4.jpeg"
+    ],
+    "reviews": []
+  },
+  {
+    "id": "statussaver",
+    "title": "Status Saver & Insta Downloader",
+    "developer": "Aditya Kewat",
+    "category": "Tools",
+    "subcategory": "Utilities",
+    "rating": 0.0,
+    "ratingCount": 0,
+    "downloads": 0,
+    "size": "16.5 MB",
+    "version": "1.0.0",
+    "packageName": "com.statussaver.app",
+    "icon": "uploads/icons/statussaver.svg",
+    "banner": "uploads/screenshots/ss1.jpeg",
+    "description": "Save WhatsApp status photos & videos with one tap and download public Instagram Reels, IGTV videos, and posts directly to your phone gallery in high resolution!",
+    "apkUrl": "uploads/apks/statussaver.apk",
+    "badge": "Release Version",
+    "screenshots": [
+      "uploads/screenshots/ss1.jpeg",
+      "uploads/screenshots/ss2.jpeg",
+      "uploads/screenshots/ss3.jpeg",
+      "uploads/screenshots/ss4.jpeg"
+    ],
+    "reviews": []
+  },
+  {
+    "id": "blastgrid",
+    "title": "BlastGrid",
+    "developer": "Aditya Kewat",
+    "category": "Games",
+    "subcategory": "Arcade",
+    "rating": 0.0,
+    "ratingCount": 0,
+    "downloads": 0,
+    "size": "9.3 MB",
+    "version": "1.0",
+    "packageName": "com.blastgrid.game",
+    "icon": "uploads/icons/blastgrid.svg",
+    "banner": "uploads/screenshots/bg1.jpeg",
+    "description": "Action-packed brick busting puzzle game! Blast through colorful grids, unlock powerful multi-ball boosters, dynamic particle explosions, and high score challenges.",
+    "apkUrl": "uploads/apks/blastgrid.apk",
+    "badge": "Release Version",
+    "screenshots": [
+      "uploads/screenshots/bg1.jpeg",
+      "uploads/screenshots/bg2.jpeg",
+      "uploads/screenshots/bg3.jpeg",
+      "uploads/screenshots/bg4.jpeg"
+    ],
+    "reviews": []
+  },
+  {
+    "id": "arrowjam",
+    "title": "Arrow Jam: Escape & Untangle",
+    "developer": "Aditya Kewat",
+    "category": "Games",
+    "subcategory": "Puzzle",
+    "rating": 5.0,
+    "ratingCount": 1,
+    "downloads": 0,
+    "size": "10.0 MB",
+    "version": "1.0.0",
+    "packageName": "com.example.arrowescape",
+    "icon": "uploads/icons/arrowjam.png",
+    "banner": "uploads/screenshots/aj1.png",
+    "description": "Tap to release the arrows and untangle the grid! A satisfying neon spatial logic puzzle with 200+ progressive levels, 8 customizable themes, OTA dynamic levels, rewarded revives, and 40 achievements.",
+    "apkUrl": "uploads/apks/arrowjam.apk",
+    "badge": "Release Version",
+    "screenshots": [
+      "uploads/screenshots/aj1.png",
+      "uploads/screenshots/aj2.png",
+      "uploads/screenshots/aj3.png",
+      "uploads/screenshots/aj4.png",
+      "uploads/screenshots/aj5.png"
+    ],
+    "reviews": []
+  }
+]
