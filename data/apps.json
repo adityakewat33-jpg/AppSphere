@@ -73,5 +73,31 @@
       "uploads/screenshots/bg4.jpeg"
     ],
     "reviews": []
+  },
+  {
+    "id": "arrowjam",
+    "title": "Arrow Jam: Escape & Untangle",
+    "developer": "Aditya Kewat",
+    "category": "Games",
+    "subcategory": "Puzzle",
+    "rating": 5.0,
+    "ratingCount": 1,
+    "downloads": 0,
+    "size": "10.0 MB",
+    "version": "1.0.0",
+    "packageName": "com.example.arrowescape",
+    "icon": "uploads/icons/arrowjam.png",
+    "banner": "uploads/screenshots/aj1.png",
+    "description": "Tap to release the arrows and untangle the grid! A satisfying neon spatial logic puzzle with 200+ progressive levels, 8 customizable themes, OTA dynamic levels, rewarded revives, and 40 achievements.",
+    "apkUrl": "uploads/apks/arrowjam.apk",
+    "badge": "Release Version",
+    "screenshots": [
+      "uploads/screenshots/aj1.png",
+      "uploads/screenshots/aj2.png",
+      "uploads/screenshots/aj3.png",
+      "uploads/screenshots/aj4.png",
+      "uploads/screenshots/aj5.png"
+    ],
+    "reviews": []
   }
 ]
