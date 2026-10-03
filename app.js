@@ -8,10 +8,10 @@ let selectedScreenshotFiles = [];
 // ===================================================================
 // GOOGLE SHEETS LIVE DOWNLOADS SYNC CONFIGURATION
 // ===================================================================
-const DEFAULT_SHEETS_URL = "https://script.google.com/macros/s/AKfycbyXJwKJSfj5s6BJpumRW1hlh55GRx7lItKwf_5u4AgKlEjQRyJSagVVI38FClveLoYlbA/exec";
+const DEFAULT_SHEETS_URL = "https://script.google.com/macros/s/AKfycby50lcuh6bD_Vsr4URZCFXh5mW5UoRYCq6J83Kme2g2NuSBg-LuSMdyBN0Q4UWEjnjcGw/exec";
 let GOOGLE_SHEETS_SCRIPT_URL = localStorage.getItem("appsphere_sheets_url") || DEFAULT_SHEETS_URL;
 
-const DB_VERSION = 'v12_google_sheets_live_sync';
+const DB_VERSION = 'v13_google_sheets_connected';
 
 // Purge any old mock data from browser localStorage
 if (localStorage.getItem('appsphere_db_version') !== DB_VERSION) {
