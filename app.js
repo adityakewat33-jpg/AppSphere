@@ -5,7 +5,13 @@ let activeApp = null;
 let selectedStarRating = 5;
 let selectedScreenshotFiles = [];
 
-const DB_VERSION = 'v11_arrow_jam_release';
+// ===================================================================
+// GOOGLE SHEETS LIVE DOWNLOADS SYNC CONFIGURATION
+// ===================================================================
+const DEFAULT_SHEETS_URL = "https://script.google.com/macros/s/AKfycbyXJwKJSfj5s6BJpumRW1hlh55GRx7lItKwf_5u4AgKlEjQRyJSagVVI38FClveLoYlbA/exec";
+let GOOGLE_SHEETS_SCRIPT_URL = localStorage.getItem("appsphere_sheets_url") || DEFAULT_SHEETS_URL;
+
+const DB_VERSION = 'v12_google_sheets_live_sync';
 
 // Purge any old mock data from browser localStorage
 if (localStorage.getItem('appsphere_db_version') !== DB_VERSION) {
@@ -165,9 +171,35 @@ document.addEventListener('DOMContentLoaded', () => {
   loadApps();
   setupEvents();
   initFirebaseRealtimeListeners();
+  syncGoogleSheetsDownloads();
 });
 
 // Realtime Firebase Listeners (Syncs downloads & reviews across all devices worldwide)
+// Sync real download counts from Google Sheets
+async function syncGoogleSheetsDownloads() {
+  if (!GOOGLE_SHEETS_SCRIPT_URL) return;
+
+  try {
+    const res = await fetch(`${GOOGLE_SHEETS_SCRIPT_URL}?action=get&t=${Date.now()}`);
+    const json = await res.json();
+    if (json && json.success && json.downloads) {
+      Object.keys(json.downloads).forEach(appId => {
+        const app = currentApps.find(a => a.id.toLowerCase() === appId.toLowerCase());
+        if (app) {
+          app.downloads = json.downloads[appId];
+          updateCardDownloadsInDOM(app.id, app.downloads);
+          if (activeApp && activeApp.id.toLowerCase() === appId.toLowerCase()) {
+            document.getElementById("modalDownloads").textContent = formatDownloadsPlayStore(app.downloads);
+          }
+        }
+      });
+      console.log("📊 Google Sheets Live Downloads Synced:", json.downloads);
+    }
+  } catch (err) {
+    console.warn("Google Sheets sync warning:", err);
+  }
+}
+
 function initFirebaseRealtimeListeners() {
   if (!db) return;
 
@@ -490,7 +522,17 @@ async function downloadApk(app) {
   document.getElementById('modalDownloads').textContent = formatDownloadsPlayStore(app.downloads);
   updateCardDownloadsInDOM(app.id, app.downloads);
 
-  // 1. Sync to Cloud Firebase Firestore (Global Count)
+    // 1. Sync to Google Sheets (Real-Time Counter)
+  if (GOOGLE_SHEETS_SCRIPT_URL) {
+    try {
+      fetch(`${GOOGLE_SHEETS_SCRIPT_URL}?action=increment&appId=${encodeURIComponent(app.id)}&t=${Date.now()}`, {
+        method: "GET",
+        mode: "no-cors"
+      }).catch(e => console.warn("Google Sheets increment note:", e));
+    } catch (e) {}
+  }
+
+  // 2. Sync to Cloud Firebase Firestore (Global Count)
   if (db) {
     try {
       db.collection('apps').doc(app.id).set({
@@ -567,6 +609,33 @@ function renderReviews(reviews) {
 
 // Setup Event Listeners
 function setupEvents() {
+  // Google Sheets Sync Settings Button
+  const sheetsUrlInput = document.getElementById("sheetsUrlInput");
+  const saveSheetsUrlBtn = document.getElementById("saveSheetsUrlBtn");
+  const sheetsSyncStatus = document.getElementById("sheetsSyncStatus");
+
+  if (sheetsUrlInput && GOOGLE_SHEETS_SCRIPT_URL) {
+    sheetsUrlInput.value = GOOGLE_SHEETS_SCRIPT_URL;
+    sheetsSyncStatus.textContent = "✅ Connected to Google Sheets";
+  }
+
+  if (saveSheetsUrlBtn) {
+    saveSheetsUrlBtn.addEventListener("click", () => {
+      const url = sheetsUrlInput.value.trim();
+      if (url) {
+        GOOGLE_SHEETS_SCRIPT_URL = url;
+        localStorage.setItem("appsphere_sheets_url", url);
+        sheetsSyncStatus.textContent = "✅ Connected & Syncing with Google Sheets...";
+        showToast("Google Sheets URL connected!");
+        syncGoogleSheetsDownloads();
+      } else {
+        GOOGLE_SHEETS_SCRIPT_URL = "";
+        localStorage.removeItem("appsphere_sheets_url");
+        sheetsSyncStatus.textContent = "Google Sheets sync disabled.";
+      }
+    });
+  }
+
   // Main Category Tabs
   document.querySelectorAll('.gp-tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
